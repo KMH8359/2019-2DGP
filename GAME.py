@@ -3,11 +3,11 @@ from pico2d import *
 open_canvas()
 map = load_image('Map_OVEN1.png')
 #if cookienum == 1:
-#character = load_image('BraveCookie.png')
+character = load_image('BraveCookie.png')
 #elif cookienum == 2:
 #character = load_image('ButtercreamCookie.png')
 #elif cookienum == 3:
-character = load_image('AngelCookie.png')
+#character = load_image('AngelCookie.png')
 #elif cookienum == 4:
 #character = load_image('KnightCookie.png')
 #character = load_image('ZombieCookie.png')
@@ -28,7 +28,9 @@ def handle_events():
     global cookienum
     global y
     global jumping
+    global sliding
     global stateframeY
+    global frame
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -36,12 +38,20 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            if jumping == False:
+            if jumping == False and sliding == False:
                 jumping = True
                 stateframeY = 10
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+                frame = 0
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
             if sliding == False:
                 sliding = True
+                frame = 8
+                stateframeY = 1620
+        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
+            if sliding == True:
+                sliding = False
+                frame = 0
+                stateframeY = 1300
         elif event.type == SDL_MOUSEBUTTONDOWN:
             cookienum += 1
             if cookienum > 4:
@@ -61,10 +71,12 @@ while True:
     handle_events()
     if jumping == False:
         frame = (frame + 1) % 4
+    x += 10
     if jumping == True:
-        frame = (frame + 1) % 4
-    x += 5
-    if jumping == True:
+        if jumpcount == 3:
+            frame += 1
+        if jumpcount == 5:
+            frame += 1
         if jumpcount < 4:
             y += 25
             jumpcount += 1
@@ -75,6 +87,9 @@ while True:
             jumpcount = 0
             jumping = False
             stateframeY = 1300
+    if sliding == True:
+        frame = ( frame + 1 ) % 2 + 8
+        
     delay(0.05)
 
 close_canvas()
