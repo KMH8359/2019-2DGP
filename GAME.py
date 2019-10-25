@@ -1,15 +1,18 @@
 from pico2d import *
+import game_framework
+import json
+import os
 
 open_canvas()
 map = load_image('Map_OVEN1.png')
 #if cookienum == 1:
-character = load_image('BraveCookie.png')
+#character = load_image('BraveCookie.png')
 #elif cookienum == 2:
 #character = load_image('ButtercreamCookie.png')
 #elif cookienum == 3:
 #character = load_image('AngelCookie.png')
 #elif cookienum == 4:
-#character = load_image('KnightCookie.png')
+character = load_image('KnightCookie.png')
 #character = load_image('ZombieCookie.png')
 
 running = True
@@ -73,17 +76,17 @@ while True:
         frame = (frame + 1) % 4
     x += 10
     if jumping == True:
-        if jumpcount == 3:
+        if jumpcount == 8:
             frame += 1
-        if jumpcount == 5:
+        if jumpcount == 12:
             frame += 1
-        if jumpcount < 4:
-            y += 25
+        if jumpcount < 10:
+            y += 10
             jumpcount += 1
-        if jumpcount >= 4:
-            y -= 25
+        if jumpcount >= 10:
+            y -= 10
             jumpcount += 1
-        if jumpcount >= 8:
+        if jumpcount >= 20:
             jumpcount = 0
             jumping = False
             stateframeY = 1300
