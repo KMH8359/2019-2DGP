@@ -9,7 +9,7 @@ image = None
 
 def enter():
     global image
-    image = load_image('title.png')
+    image = load_image('INTROIMAGE.png')
 
 
 def exit():
@@ -30,7 +30,7 @@ def handle_events():
                 game_framework.change_state(main_state)
 
 def draw():
-    image.draw(400,300)
+    image.draw(400,250)
 
 
 

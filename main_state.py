@@ -3,6 +3,8 @@ import game_framework
 import json
 import os
 import title_state
+import random
+
 #import shop_state
 #map = load_image('Map_OVEN1.png')
 #character = load_image('BraveCookie.png')
@@ -17,11 +19,16 @@ name = "MainState"
 
 map = None
 character = None
-
+bigcoin = None
+bigger = None
+drain = None
+faster = None
+smallhp = None
 
 class Character:
     def __init__(self):
-        self.image = load_image('BraveCookie.png')
+        if cookienum == 1:
+            self.image = load_image('BraveCookie.png')
         self.x = 0
         self.y = 0
         self.frameX = 0
@@ -53,29 +60,63 @@ class Character:
                 self.frameY = 1090
                 
         elif self.sliding == True:
-            self.frameX = (self.frameX + 1 ) % 2 + 9
-            
+            self.frameX = (self.frameX + 1 ) % 2 + 9           
         self.x += 1
     def draw(self):
         self.image.clip_draw((self.frameX) * 272 + 10, self.frameY, 250, 250, self.x, 200 + self.y,200,200)
-        
+
+class Coin:
+    def __init__(self):
+        self.image = load_image('BigCoin.png')
+    def draw(self):
+        self.image.clip_draw(0,0,160,160,random.randint(0,800),random.randint(0,600),50,50)
+class Bigger:
+    def __init__(self):
+        self.image = load_image('Bigger.png')
+    def draw(self):
+        self.image.clip_draw(0,0,90,90,random.randint(0,800),random.randint(0,600),50,50)
+class Drain:
+    def __init__(self):
+        self.image = load_image('drain.png')
+    def draw(self):
+        self.image.clip_draw(0,0,90,90,random.randint(0,800),random.randint(0,600),50,50)
+class Faster:
+    def __init__(self):
+        self.image = load_image('Faster.png')
+    def draw(self):
+        self.image.clip_draw(0,0,90,90,random.randint(0,800),random.randint(0,600),50,50)
+class smallHP:
+    def __init__(self):
+        self.image = load_image('smallHP.png')
+    def draw(self):
+        self.image.clip_draw(0,0,90,90,random.randint(0,800),random.randint(0,600),50,50)
+
 class Map:
     def __init__(self):
         self.image = load_image('Map_OVEN1.png')
     def draw(self):
         self.image.draw(400,300,800,600)
-class Item:
-    def __init__(self):
-        self.image = load_image('Jellies.png')
 
 def enter():
-    global character,map
+    global character,map,bigcoin,bigger,drain,faster,smallhp
     character = Character()
     map = Map()
+    bigcoin = Coin()
+    bigger = Bigger()
+    drain = Drain()
+    faster = Faster()
+    smallhp = smallHP()
+    #items = [Item() for i in range(100)]
 def exit():
-    global character, map
+    global character, map,bigcoin,bigger,drain,faster,smallhp
     del(character)
     del(map)
+    del(bigcoin)
+    del(bigger)
+    del(drain)
+    del(faster)
+    del(smallhp)
+
 
 def pause():
     pass
@@ -117,6 +158,12 @@ def update():
 def draw():
     map.draw()
     character.draw()
+    bigcoin.draw()
+    bigger.draw()
+    drain.draw()
+    faster.draw()
+    smallhp.draw()
+        
 
 
 
