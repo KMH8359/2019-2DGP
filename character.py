@@ -18,15 +18,11 @@ FRAMES_PER_ACTION = 8
 
 
 # Character Event
-RIGHTKEY_DOWN, LEFTKEY_DOWN, UPKEY_DOWN, DOWNKEY_DOWN, RIGHTKEY_UP, LEFTKEY_UP, UPKEY_UP, DOWNKEY_UP, SPACE = range(9)
+UPKEY_DOWN, DOWNKEY_DOWN,UPKEY_UP, DOWNKEY_UP, SPACE = range(5)
 
 key_event_table = {
-    (SDL_KEYDOWN, SDLK_RIGHT): RIGHTKEY_DOWN,
-    (SDL_KEYDOWN, SDLK_LEFT): LEFTKEY_DOWN,
     (SDL_KEYDOWN, SDLK_UP): UPKEY_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWNKEY_DOWN,
-    (SDL_KEYUP, SDLK_RIGHT): RIGHTKEY_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFTKEY_UP,
     (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP,
     (SDL_KEYDOWN, SDLK_SPACE): SPACE
@@ -39,15 +35,6 @@ class WalkingState:
 
     @staticmethod
     def enter(character, event):
-        if event == RIGHTKEY_DOWN:
-            character.x_velocity += RUN_SPEED_PPS
-        elif event == RIGHTKEY_UP:
-            character.x_velocity -= RUN_SPEED_PPS
-        if event == LEFTKEY_DOWN:
-            character.x_velocity -= RUN_SPEED_PPS
-        elif event == LEFTKEY_UP:
-            character.x_velocity += RUN_SPEED_PPS
-
         if event == UPKEY_DOWN:
             character.y_velocity += RUN_SPEED_PPS
         elif event == UPKEY_UP:
@@ -79,7 +66,7 @@ class WalkingState:
         cx, cy = character.canvas_width//2, character.canvas_height//2
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 100, 100, 100, 100, cx, cy)
+            character.image.clip_draw(int(character.frame) * 100, 0, 100, 100, cx, cy)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 100, 0, 100, 100, cx, cy)
@@ -100,7 +87,7 @@ class WalkingState:
 
 
 next_state_table = {
-    WalkingState: {RIGHTKEY_UP: WalkingState, LEFTKEY_UP: WalkingState, RIGHTKEY_DOWN: WalkingState, LEFTKEY_DOWN: WalkingState,
+    WalkingState: {
                 UPKEY_UP: WalkingState, UPKEY_DOWN: WalkingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
                 SPACE: WalkingState}
 }
@@ -115,7 +102,7 @@ class Character:
         self.image = load_image('BraveCookie.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
-        self.x_velocity, self.y_velocity = 0, 0
+        self.x_velocity, self.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER), 0
         self.frame = 0
         self.event_que = []
         self.cur_state = WalkingState
@@ -127,7 +114,7 @@ class Character:
 
     def set_background(self, bg):
         self.bg = bg
-        self.x = self.bg.w / 2
+        self.x = 0
         self.y = self.bg.h / 2
 
     def add_event(self, event):
@@ -140,6 +127,7 @@ class Character:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+            self.x_velocity += RUN_SPEED_PPS
 
     def draw(self):
         self.cur_state.draw(self)
