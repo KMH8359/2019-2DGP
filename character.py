@@ -13,8 +13,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Character Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
-
+FRAMES_PER_ACTION = 4
 
 
 # Character Event
@@ -32,7 +31,67 @@ key_event_table = {
 # Character States
 
 class WalkingState:
+    frameY = 272
+    frameX = 272
+    @staticmethod
+    def enter(character, event):
+        pass
+        #if event == UPKEY_DOWN:
+            #character.cur_state = JumpingState
+            #character.cur_state.enter(character, None)
+        #if event == UPKEY_UP:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #if event == DOWNKEY_DOWN:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #elif event == DOWNKEY_UP:
+         #   character.y_velocity += RUN_SPEED_PPS
 
+
+
+    @staticmethod
+    def exit(character, event):
+        if event == SPACE:
+            character.fire_ball()
+
+    @staticmethod
+    def do(character):
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 4
+        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        character.x += character.x_velocity * game_framework.frame_time
+        character.y += character.y_velocity * game_framework.frame_time
+
+        character.x = clamp(character.canvas_width // 2, character.x, character.bg.w - character.canvas_width // 2)
+        character.y = clamp(character.canvas_height // 2, character.y, character.bg.h - character.canvas_height // 2)
+
+
+    @staticmethod
+    def draw(character):
+        global frameX,frameY
+        cx, cy = character.canvas_width//4, character.canvas_height//4
+
+        if character.x_velocity > 0:
+            character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 260, 270, cx, cy)
+            character.dir = 1
+        elif character.x_velocity < 0:
+            character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
+            character.dir = -1
+        else:
+            # if character x_velocity == 0
+            if character.y_velocity > 0 or character.y_velocity < 0:
+                if character.dir == 1:
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 260, 270, cx, cy)
+                else:
+                    character.image.clip_draw(int(character.frame) * 270, 1040, 300, 300, cx, cy)
+            else:
+                # character is idle
+                if character.dir == 1:
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 260, 270, cx, cy)
+                else:
+                    character.image.clip_draw(int(character.frame) * 300, 1040, 300, 300, cx, cy)
+class JumpingState:
+    frameY = 0
+    frameX = 272
     @staticmethod
     def enter(character, event):
         if event == UPKEY_DOWN:
@@ -53,6 +112,8 @@ class WalkingState:
 
     @staticmethod
     def do(character):
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 3
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.x += character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
@@ -63,33 +124,38 @@ class WalkingState:
 
     @staticmethod
     def draw(character):
-        cx, cy = character.canvas_width//2, character.canvas_height//2
+        global frameX,frameY
+        cx, cy = character.canvas_width//4, character.canvas_height//4
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 100, 0, 100, 100, cx, cy)
+            character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
             character.dir = 1
         elif character.x_velocity < 0:
-            character.image.clip_draw(int(character.frame) * 100, 0, 100, 100, cx, cy)
+            character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
             character.dir = -1
         else:
             # if character x_velocity == 0
             if character.y_velocity > 0 or character.y_velocity < 0:
                 if character.dir == 1:
-                    character.image.clip_draw(int(character.frame) * 100, 100, 100, 100, cx, cy)
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
                 else:
-                    character.image.clip_draw(int(character.frame) * 100, 0, 100, 100, cx, cy)
+                    character.image.clip_draw(int(character.frame) * 270, 1040, 300, 300, cx, cy)
             else:
                 # character is idle
                 if character.dir == 1:
-                    character.image.clip_draw(int(character.frame) * 100, 300, 100, 100, cx, cy)
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
                 else:
-                    character.image.clip_draw(int(character.frame) * 100, 200, 100, 100, cx, cy)
+                    character.image.clip_draw(int(character.frame) * 300, 1040, 300, 300, cx, cy)
+
 
 
 next_state_table = {
     WalkingState: {
-                UPKEY_UP: WalkingState, UPKEY_DOWN: WalkingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
-                SPACE: WalkingState}
+                UPKEY_UP: WalkingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
+                SPACE: WalkingState},
+    JumpingState: {
+                UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: JumpingState,
+                SPACE: JumpingState}
 }
 
 
@@ -131,7 +197,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
+        #self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
