@@ -8,6 +8,11 @@ import random
 
 from character import Character
 from background import FixedBackground as Background
+from items import Coin
+from items import Bigger
+from items import Drain
+from items import Faster
+from items import smallHP
 
 #import shop_state
 #map = load_image('Map_OVEN1.png')
@@ -29,78 +34,6 @@ drain = None
 faster = None
 smallhp = None
 
-
-class Coin:
-    global character
-    def __init__(self):
-        self.image = load_image('BigCoin.png')
-        self.frame = 0
-        self.x = 100
-        self.y = 200
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-        if self.x <= character.x + 250 and self.x + 50 >= character.x and self.y <= character.y + 250 and self.y + 50 >= character.y:
-            del(self)
-    def draw(self):
-        self.image.clip_draw(self.frame,0,160,160,self.x,self.y,50,50)
-class Bigger:
-    global character
-    def __init__(self):
-        self.image = load_image('Bigger.png')
-        self.frame = 0
-        self.x = 200
-        self.y = 200
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-        if self.x <= character.x + 250 and self.x + 50 >= character.x and self.y <= character.y + 250 and self.y + 50 >= character.y:
-            del(self)
-    def draw(self):
-        self.image.clip_draw(self.frame,0,90,90,self.x,self.y,50,50)
-class Drain:
-    global character
-    def __init__(self):
-        self.image = load_image('drain.png')
-        self.frame = 0
-        self.x = 300
-        self.y = 200
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-        if self.x <= character.x + 250 and self.x + 50 >= character.x and self.y <= character.y + 250 and self.y + 50 >= character.y:
-            del(self)
-    def draw(self):
-        self.image.clip_draw(self.frame,0,90,90,self.x,self.y,50,50)
-class Faster:
-    global character
-    def __init__(self):
-        self.image = load_image('Faster.png')
-        self.frame = 0
-        self.x = 400
-        self.y = 200
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-        if self.x <= character.x + 250 and self.x + 50 >= character.x and self.y <= character.y + 250 and self.y + 50 >= character.y:
-            del(self)
-    def draw(self):
-        self.image.clip_draw(self.frame,0,90,90,self.x,self.y,50,50)
-class smallHP:
-    global character
-    def __init__(self):
-        self.image = load_image('smallHP.png')
-        self.frame = 0
-        self.x = 500
-        self.y = 200
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-        if self.x <= character.x + 250 and self.x + 50 >= character.x and self.y <= character.y + 250 and self.y + 50 >= character.y:
-            del(self)
-    def draw(self):
-        self.image.clip_draw(self.frame,0,90,90,self.x,self.y,50,50)
-
-class Map:
-    def __init__(self):
-        self.image = load_image('Map_OVEN1.png')
-    def draw(self):
-        self.image.draw(400,300,800,600)
 
 def enter():
     global character
