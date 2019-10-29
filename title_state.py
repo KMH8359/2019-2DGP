@@ -30,7 +30,7 @@ def handle_events():
                 game_framework.change_state(main_state)
 
 def draw():
-    image.draw(400,300,800,600)
+    image.draw(600,400,1200,800)
 
 
 

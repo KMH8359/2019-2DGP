@@ -31,7 +31,7 @@ def update():
 
 def draw():
     global image
-    image.draw(400,300)
+    image.draw(600,400,1200,800)
 
 
 

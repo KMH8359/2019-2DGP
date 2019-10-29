@@ -15,6 +15,8 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4
 JUMPCOUNT = 0
+DOUBLEJUMPCOUNT = 0
+JUMPING = 0
 
 # Character Event
 UPKEY_DOWN, DOWNKEY_DOWN,UPKEY_UP, DOWNKEY_UP, SPACE, STOP_JUMP = range(6)
@@ -49,6 +51,45 @@ class WalkingState:
 
 
     @staticmethod
+    def do(character):
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 4
+        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        character.x += character.x_velocity * game_framework.frame_time
+        character.y += character.y_velocity * game_framework.frame_time
+
+    @staticmethod
+    def draw(character):
+        global frameX,frameY
+        cx, cy = character.canvas_width//8, 240
+
+        if character.x_velocity > 0:
+            character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 240, 240, cx, cy)
+            character.dir = 1
+        else:
+            # if character x_velocity == 0
+            if character.y_velocity > 0 or character.y_velocity < 0:
+                if character.dir == 1:
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 260, 270, cx, cy)
+class RunningState:
+    frameY = 272
+    frameX = 272
+    @staticmethod
+    def enter(character, event):
+        pass
+        #if event == UPKEY_DOWN:
+            #character.cur_state = JumpingState
+            #character.cur_state.enter(character, None)
+        #if event == UPKEY_UP:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #if event == DOWNKEY_DOWN:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #elif event == DOWNKEY_UP:
+         #   character.y_velocity += RUN_SPEED_PPS
+
+
+
+    @staticmethod
     def exit(character, event):
         if event == SPACE:
             character.fire_ball()
@@ -58,20 +99,17 @@ class WalkingState:
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        character.x += character.x_velocity * game_framework.frame_time
+        character.x += 2 * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
-
-        character.x = clamp(character.canvas_width // 2, character.x, character.bg.w - character.canvas_width // 2)
-        character.y = clamp(character.canvas_height // 2, character.y, character.bg.h - character.canvas_height // 2)
 
 
     @staticmethod
     def draw(character):
         global frameX,frameY
-        cx, cy = character.canvas_width//4, character.canvas_height//4
+        cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 260, 270, cx, cy)
+            character.image.clip_draw(int(character.frame + 4) * 270 + 20 , 1090, 260, 270, cx, cy)
             character.dir = 1
         else:
             # if character x_velocity == 0
@@ -103,32 +141,121 @@ class JumpingState:
     def do(character):
         global FRAMES_PER_ACTION
         global JUMPCOUNT
-        if JUMPCOUNT >= 0 and JUMPCOUNT < 50:
-            character.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER)
-        elif JUMPCOUNT >= 50 and JUMPCOUNT < 100:
-            character.y_velocity = -1 * (RUN_SPEED_MPS * PIXEL_PER_METER)
-        if JUMPCOUNT % 100 == 0:
+        global JUMPING
+        if JUMPCOUNT >= 0 and JUMPCOUNT < 100:
+            JUMPING += 2
+        elif JUMPCOUNT >= 100 and JUMPCOUNT < 200:
+            JUMPING -= 2
+        if JUMPCOUNT % 200 == 0:
             character.add_event(STOP_JUMP)
-            character.y_velocity = 0
+            JUMPING = 0
             JUMPCOUNT = 0
             
         JUMPCOUNT += 1
-        FRAMES_PER_ACTION = 3
-        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 2
+        #character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        character.frame = 0
+        if JUMPCOUNT > 180:
+            character.frame = -1
         character.x += character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
-        character.x = clamp(character.canvas_width // 2, character.x, character.bg.w - character.canvas_width // 2)
-        character.y = clamp(character.canvas_height // 2, character.y, character.bg.h - character.canvas_height // 2)
+
 
 
     @staticmethod
     def draw(character):
         global frameX,frameY
-        cx, cy = character.canvas_width//4, character.canvas_height//4
+        global JUMPING
+        cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 10 , 10, 260, 260, cx, cy)
+            character.image.clip_draw(int(character.frame) * 270 + 1910 , 1365, 260, 260, cx, cy + JUMPING)
+            character.dir = 1
+        elif character.x_velocity < 0:
+            character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
+            character.dir = -1
+        else:
+            # if character x_velocity == 0
+            if character.y_velocity > 0 or character.y_velocity < 0:
+                if character.dir == 1:
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
+                else:
+                    character.image.clip_draw(int(character.frame) * 270, 1040, 300, 300, cx, cy)
+            else:
+                # character is idle
+                if character.dir == 1:
+                    character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
+                else:
+                    character.image.clip_draw(int(character.frame) * 300, 1040, 300, 300, cx, cy)
+                    
+class DoubleJumpingState:
+    frameY = 0
+    frameX = 272
+    @staticmethod
+    def enter(character, event):
+        pass
+        #if event == UPKEY_DOWN:
+         #   character.y_velocity += RUN_SPEED_PPS
+        #elif event == UPKEY_UP:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #if event == DOWNKEY_DOWN:
+         #   character.y_velocity -= RUN_SPEED_PPS
+        #elif event == DOWNKEY_UP:
+         #   character.y_velocity += RUN_SPEED_PPS
+
+
+    @staticmethod
+    def exit(character, event):
+        if event == SPACE:
+            character.fire_ball()
+
+    @staticmethod
+    def do(character):
+        global FRAMES_PER_ACTION
+        global JUMPING
+        global JUMPCOUNT
+        global DOUBLEJUMPCOUNT
+            
+        if DOUBLEJUMPCOUNT >= 0 and DOUBLEJUMPCOUNT < 100:
+            #character.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER)
+            JUMPING += 2
+        elif DOUBLEJUMPCOUNT >= 100:
+            #character.y_velocity = -1 * (RUN_SPEED_MPS * PIXEL_PER_METER)
+            JUMPING -= 2
+        if JUMPING == 0:
+            character.add_event(STOP_JUMP)
+            #character.y_velocity = 0
+            JUMPCOUNT = 0
+            DOUBLEJUMPCOUNT = 0
+            
+        DOUBLEJUMPCOUNT += 1
+        FRAMES_PER_ACTION = 6
+        #character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        if DOUBLEJUMPCOUNT < 30:
+            character.frame = 1
+        elif 30 <= DOUBLEJUMPCOUNT and DOUBLEJUMPCOUNT < 60:
+            character.frame = 1
+        elif 60 <= DOUBLEJUMPCOUNT and DOUBLEJUMPCOUNT < 90:
+            character.frame = 2
+        elif 90 <= DOUBLEJUMPCOUNT and DOUBLEJUMPCOUNT < 120:
+            character.frame = 3
+        elif 120 <= DOUBLEJUMPCOUNT and DOUBLEJUMPCOUNT < 150:
+            character.frame = 4
+        elif 150 <= DOUBLEJUMPCOUNT:
+            character.frame = 5
+        character.x += character.x_velocity * game_framework.frame_time
+        character.y += character.y_velocity * game_framework.frame_time
+
+
+
+    @staticmethod
+    def draw(character):
+        global frameX,frameY
+        cx, cy = character.canvas_width//8, 240
+
+        if character.x_velocity > 0:
+            character.image.clip_draw(int(character.frame) * 270 + 15 , 1365, 250, 260, cx, cy + JUMPING)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -166,14 +293,13 @@ class SlidingState:
         character.x += character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
-        character.x = clamp(character.canvas_width // 2, character.x, character.bg.w - character.canvas_width // 2)
-        character.y = clamp(character.canvas_height // 2, character.y, character.bg.h - character.canvas_height // 2)
+
 
 
     @staticmethod
     def draw(character):
         global frameX,frameY
-        cx, cy = character.canvas_width//4, character.canvas_height//4
+        cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
             character.image.clip_draw(int(character.frame) * 270 + 2460 , 1365, 260, 260, cx, cy)
@@ -201,13 +327,19 @@ class SlidingState:
 next_state_table = {
     WalkingState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
+                SPACE: RunningState},
+    RunningState: {
+                UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
                 SPACE: WalkingState},
     JumpingState: {
-                UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: WalkingState,
+                UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: JumpingState,
                 SPACE: JumpingState, STOP_JUMP: WalkingState},
     SlidingState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
-                SPACE: JumpingState}
+                SPACE: JumpingState},
+    DoubleJumpingState: {
+                UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: DoubleJumpingState,
+                DOWNKEY_DOWN: DoubleJumpingState, SPACE: DoubleJumpingState, STOP_JUMP: WalkingState},
 }
 
 
@@ -227,7 +359,7 @@ class Character:
         self.cur_state.enter(self, None)
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x + 80, self.y - 50, self.x + 180, self.y + 300
 
 
     def set_background(self, bg):
@@ -242,7 +374,6 @@ class Character:
         self.cur_state.do(self)
         if len(self.event_que) > 0:
             event = self.event_que.pop()
-            self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
 

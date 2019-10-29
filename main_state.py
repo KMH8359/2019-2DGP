@@ -7,69 +7,37 @@ import title_state
 import random
 
 from character import Character
-from background import FixedBackground as Background
-from items import Coin
-from items import Bigger
-from items import Drain
-from items import Faster
-from items import smallHP
-
-#import shop_state
-#map = load_image('Map_OVEN1.png')
-#character = load_image('BraveCookie.png')
-cookienum = 1
-#cookienum = 2
-#character = load_image('ButtercreamCookie.png')
-#character = load_image('AngelCookie.png')
-#character = load_image('KnightCookie.png')
-#character = load_image('ZombieCookie.png')
+#from background import FixedBackground as Background
+from background import InfiniteBackground as Background
+from item import Coin, Bigger, Drain, Faster, smallHP
+from background import MapTile
 
 name = "MainState"
 
 map = None
 character = None
-bigcoin = None
-bigger = None
-drain = None
-faster = None
-smallhp = None
+maptile = None
+items = []
 
 
 def enter():
     global character
     character = Character()
     game_world.add_object(character, 1)
-    #global map
-    #map = Map()
     global background
     background = Background()
     game_world.add_object(background, 0)
-    global bigcoin
-    bigcoin = Coin()
-    game_world.add_object(bigcoin, 2)
-    global bigger
-    bigger = Bigger()
-    game_world.add_object(bigger, 3)
-    global drain
-    drain = Drain()
-    game_world.add_object(drain, 4)
-    global faster
-    faster = Faster()
-    game_world.add_object(faster, 5)
-    global smallhp
-    smallhp = smallHP()
-    game_world.add_object(smallhp, 6)
+    global items
+    items = [Coin() for i in range(10)] + [Bigger() for i in range(10)] + [Drain() for i in range(10)] + [Faster() for i in range(10)] + [smallHP() for i in range(10)]
+    game_world.add_objects(items, 1)
+    global maptile
+    maptile = MapTile()
+    game_world.add_object(maptile, 2)
+    
     background.set_center_object(character)
+    maptile.set_center_object(character)
     character.set_background(background)
 def exit():
-    #global character, map,bigcoin,bigger,drain,faster,smallhp
-    #del(character)
-    #del(map)
-    #del(bigcoin)
-    #del(bigger)
-    #del(drain)
-    #del(faster)
-    #del(smallhp)
     game_world.clear()
 
 def handle_events():
@@ -82,7 +50,16 @@ def handle_events():
         else:
             character.handle_event(event)
     
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
 
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 def pause():
     pass
 
@@ -92,23 +69,18 @@ def resume():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-    #character.update()
-    #bigcoin.update()
-    #bigger.update()
-    #drain.update()
-    #faster.update()
-    #smallhp.update()
+    for bigger in items:
+        if collide(character, bigger):
+            items.remove(bigger)
+            game_world.remove_object(bigger)
+    for faster in items:
+        if collide(character, faster):
+            items.remove(faster)
+            game_world.remove_object(faster)
     
 def draw():
-    #background.draw()
-    #character.draw()
     for game_object in game_world.all_objects():
         game_object.draw()
-    #bigcoin.draw()
-    #bigger.draw()
-    #drain.draw()
-    #faster.draw()
-    #smallhp.draw()
         
 
 
