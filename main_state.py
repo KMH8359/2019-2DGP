@@ -11,6 +11,8 @@ from character import Character
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
+from Jellies import PinkBear,YellowBear
+from Obstacles import JumpObstacle, SlideObstacle
 
 name = "MainState"
 
@@ -18,6 +20,8 @@ map = None
 character = None
 maptile = None
 items = []
+jellies = []
+obstacles = []
 
 
 def enter():
@@ -28,12 +32,18 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
     global items
-    items = [Coin() for i in range(10)] + [Bigger() for i in range(10)] + [Drain() for i in range(10)] + [Faster() for i in range(10)] + [smallHP() for i in range(10)]
-    game_world.add_objects(items, 1)
+    #items = [Coin() for i in range(10)] + [Bigger() for i in range(10)] + [Drain() for i in range(10)] + [Faster() for i in range(10)] + [smallHP() for i in range(10)]
+    #game_world.add_objects(items, 1)
+    global jellies
+    jellies = [YellowBear() for i in range(10)] + [PinkBear() for i in range(10)]
+    game_world.add_objects(jellies, 3)
     global maptile
     maptile = MapTile()
     game_world.add_object(maptile, 2)
-    
+    global obstacles
+    obstacles = JumpObstacle() 
+    game_world.add_object(obstacles, 4)
+
     background.set_center_object(character)
     maptile.set_center_object(character)
     character.set_background(background)
@@ -69,14 +79,14 @@ def resume():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-    for bigger in items:
-        if collide(character, bigger):
-            items.remove(bigger)
-            game_world.remove_object(bigger)
-    for faster in items:
-        if collide(character, faster):
-            items.remove(faster)
-            game_world.remove_object(faster)
+    for jelly in jellies:
+        if collide(character,jelly):
+            print(character.cx)
+            print(jelly.x)
+            print(character.cy)
+            print(jelly.y)
+            jellies.remove(jelly)
+            game_world.remove_object(jelly)
     
 def draw():
     for game_object in game_world.all_objects():

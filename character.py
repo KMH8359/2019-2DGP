@@ -19,14 +19,20 @@ DOUBLEJUMPCOUNT = 0
 JUMPING = 0
 
 # Character Event
-UPKEY_DOWN, DOWNKEY_DOWN,UPKEY_UP, DOWNKEY_UP, SPACE, STOP_JUMP = range(6)
+UPKEY_DOWN, DOWNKEY_DOWN,UPKEY_UP, DOWNKEY_UP, SPACE, STOP_JUMP,LSHIFT, COOKIE1, COOKIE2, COOKIE3, COOKIE4, COOKIE5 = range(12)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_UP): UPKEY_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWNKEY_DOWN,
     (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE,
+    (SDL_KEYDOWN, SDLK_LSHIFT): LSHIFT,
+    (SDL_KEYDOWN, SDLK_1): COOKIE1,
+    (SDL_KEYDOWN, SDLK_2): COOKIE2,
+    (SDL_KEYDOWN, SDLK_3): COOKIE3,
+    (SDL_KEYDOWN, SDLK_4): COOKIE4,
+    (SDL_KEYDOWN, SDLK_5): COOKIE5  
 }
 
 
@@ -54,8 +60,9 @@ class WalkingState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
+        character.runspeed = 2
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        character.x += character.x_velocity * game_framework.frame_time
+        character.x += character.runspeed  * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
     @staticmethod
@@ -64,7 +71,7 @@ class WalkingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 240, 240, cx, cy)
+            character.image.clip_draw(int(character.frame) * 270 + 10 , 1090, 240, 240, character.cx, character.cy,character.sizeX,character.sizeY)
             character.dir = 1
         else:
             # if character x_velocity == 0
@@ -98,8 +105,9 @@ class RunningState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
+        character.runspeed = 4
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        character.x += 2 * character.x_velocity * game_framework.frame_time
+        character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
 
@@ -109,7 +117,7 @@ class RunningState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame + 4) * 270 + 20 , 1090, 260, 270, cx, cy)
+            character.image.clip_draw(int(character.frame + 4) * 270 + 20 , 1090, 240, 240, character.cx, character.cy,character.sizeX,character.sizeY)
             character.dir = 1
         else:
             # if character x_velocity == 0
@@ -143,9 +151,9 @@ class JumpingState:
         global JUMPCOUNT
         global JUMPING
         if JUMPCOUNT >= 0 and JUMPCOUNT < 100:
-            JUMPING += 2
+            JUMPING += 3
         elif JUMPCOUNT >= 100 and JUMPCOUNT < 200:
-            JUMPING -= 2
+            JUMPING -= 3
         if JUMPCOUNT % 200 == 0:
             character.add_event(STOP_JUMP)
             JUMPING = 0
@@ -157,7 +165,7 @@ class JumpingState:
         character.frame = 0
         if JUMPCOUNT > 180:
             character.frame = -1
-        character.x += character.x_velocity * game_framework.frame_time
+        character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
 
@@ -170,7 +178,7 @@ class JumpingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 1910 , 1365, 260, 260, cx, cy + JUMPING)
+            character.image.clip_draw(int(character.frame) * 270 + 1910 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -219,10 +227,10 @@ class DoubleJumpingState:
             
         if DOUBLEJUMPCOUNT >= 0 and DOUBLEJUMPCOUNT < 100:
             #character.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER)
-            JUMPING += 2
+            JUMPING += 3
         elif DOUBLEJUMPCOUNT >= 100:
             #character.y_velocity = -1 * (RUN_SPEED_MPS * PIXEL_PER_METER)
-            JUMPING -= 2
+            JUMPING -= 3
         if JUMPING == 0:
             character.add_event(STOP_JUMP)
             #character.y_velocity = 0
@@ -244,7 +252,7 @@ class DoubleJumpingState:
             character.frame = 4
         elif 150 <= DOUBLEJUMPCOUNT:
             character.frame = 5
-        character.x += character.x_velocity * game_framework.frame_time
+        character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
 
@@ -255,7 +263,7 @@ class DoubleJumpingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 15 , 1365, 250, 260, cx, cy + JUMPING)
+            character.image.clip_draw(int(character.frame) * 270 + 15 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -290,7 +298,7 @@ class SlidingState:
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 2
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        character.x += character.x_velocity * game_framework.frame_time
+        character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
 
@@ -302,7 +310,7 @@ class SlidingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 2460 , 1365, 260, 260, cx, cy)
+            character.image.clip_draw(int(character.frame) * 270 + 2460 , 1365, 240, 240, character.cx, character.cy,character.sizeX,character.sizeY)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -327,7 +335,7 @@ class SlidingState:
 next_state_table = {
     WalkingState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
-                SPACE: RunningState},
+                SPACE: RunningState, LSHIFT: WalkingState},
     RunningState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
                 SPACE: WalkingState},
@@ -340,6 +348,7 @@ next_state_table = {
     DoubleJumpingState: {
                 UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: DoubleJumpingState,
                 DOWNKEY_DOWN: DoubleJumpingState, SPACE: DoubleJumpingState, STOP_JUMP: WalkingState},
+    
 }
 
 
@@ -353,13 +362,16 @@ class Character:
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.x_velocity, self.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER), 0
+        self.runspeed = 2
+        self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
         self.event_que = []
         self.cur_state = WalkingState
+        self.sizeX, self.sizeY = 240, 240
         self.cur_state.enter(self, None)
 
     def get_bb(self):
-        return self.x + 80, self.y - 50, self.x + 180, self.y + 300
+        return self.cx - 150, self.cy - 150, self.cx + 150, self.cy + 150
 
 
     def set_background(self, bg):
@@ -385,5 +397,12 @@ class Character:
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
+            if key_event == LSHIFT:
+                if self.cy < 300:
+                    self.sizeX,self.sizeY = 800, 800
+                    self.cy = 520
+                else:
+                    self.sizeX,self.sizeY = 240, 240
+                    self.cy = 240
             self.add_event(key_event)
 

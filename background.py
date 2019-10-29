@@ -87,21 +87,25 @@ class InfiniteBackground:
 class MapTile:
     image = None
     def __init__(self):
-        self.image = load_image('maptile.png')
+        self.image = load_image('maptiles.png')
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         self.w = self.image.w
         self.h = self.image.h
         self.tiles = [n for n in range(11)]
+        self.x = 600
+        self.X = 1800
         #self.tiles = [-62, 62, 186, 310, 
         
     def set_center_object(self, boy):
         self.center_object = boy
         
     def draw(self):
-        for i in range(0, 11):
-            self.image.draw(-62 + self.window_left + 124 * i,60)
-
+        #for i in range(0, 11):
+         #   self.image.draw(-62 + self.window_left + 124 * i,60)
+         self.image.draw(self.x,60)
+         self.image.draw(self.X,60)
+         
     def get_bb(self):
         return self.x - 25, self.y + 100, self.x + 150, self.y + 120
     
@@ -110,7 +114,42 @@ class MapTile:
         self.window_left = clamp(0,
             int(self.center_object.x) - self.canvas_width//4,
             self.w - self.canvas_width)
-            
+        self.x -= 1
+        self.X -= 1
+        if self.x < -600:
+            self.x = 1800
+        if self.X < -600:
+            self.X = 1800 
+
+        self.window_bottom = 0
+
+    def handle_event(self, event):
+        pass
+
+class MapBottom:
+    image = None
+    def __init__(self):
+        self.image = load_image('mapbottom.png')
+        self.canvas_width = get_canvas_width()
+        self.canvas_height = get_canvas_height()
+        self.w = self.image.w
+        self.h = self.image.h
+        self.x = 600
+        
+    def set_center_object(self, boy):
+        self.center_object = boy
+        
+    def draw(self):
+         self.image.draw(self.x,80,1200,160)
+         
+    def get_bb(self):
+        return self.x - 25, self.y + 100, self.x + 150, self.y + 120
+    
+    def update(self):
+        pass
+        self.window_left = clamp(0,
+            int(self.center_object.x) - self.canvas_width//4,
+            self.w - self.canvas_width)
 
         self.window_bottom = 0
 
