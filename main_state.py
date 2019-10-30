@@ -21,8 +21,8 @@ character = None
 maptile = None
 items = []
 jellies = []
-obstacles = []
-
+jumpobstacles = []
+slideobstacles = []
 
 def enter():
     global character
@@ -40,9 +40,12 @@ def enter():
     global maptile
     maptile = MapTile()
     game_world.add_object(maptile, 2)
-    global obstacles
-    obstacles = JumpObstacle() 
-    game_world.add_object(obstacles, 4)
+    global jumpobstacles
+    jumpobstacles = JumpObstacle() 
+    game_world.add_object(jumpobstacles, 4)
+    global slideobstacles
+    slideobstacles = SlideObstacle() 
+    game_world.add_object(slideobstacles, 4)
 
     background.set_center_object(character)
     maptile.set_center_object(character)
@@ -86,10 +89,11 @@ def update():
         if collide(character,jelly):
             jellies.remove(jelly)
             game_world.remove_object(jelly)
-    if collide(character, obstacles) and character.invincible == 0:
-        print(character.HP)
-        character.HP -= 50
-        character.invincible += 500
+    if collide(character, jumpobstacles) or collide(character, slideobstacles):
+        if character.invincible == 0:
+            print(character.HP)
+            character.HP -= 50
+            character.invincible += 500
     
 def draw():
     for game_object in game_world.all_objects():

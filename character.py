@@ -157,15 +157,16 @@ class JumpingState:
             JUMPING -= 3
         if JUMPCOUNT % 200 == 0:
             character.add_event(STOP_JUMP)
+            print("OK")
             JUMPING = 0
             JUMPCOUNT = 0
             
         JUMPCOUNT += 1
         FRAMES_PER_ACTION = 2
         #character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        character.frame = 0
+        character.frame = 7
         if JUMPCOUNT > 180:
-            character.frame = -1
+            character.frame = 6
         character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
 
@@ -179,7 +180,7 @@ class JumpingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 1910 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
+            character.image.clip_draw(int(character.frame) * 270 + 15 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -414,7 +415,7 @@ class Character:
         if self.cur_state == SlidingState:
             return self.cx - 80,self.cy - 120,self.cx + 80,self.cy - 70
         else:
-            return self.cx - 50, self.cy - 120 + JUMPING, self.cx + 70, self.cy + 30 + JUMPING
+            return self.cx - 50, self.cy - 100 + JUMPING, self.cx + 70, self.cy + 20 + JUMPING
 
 
     def set_background(self, bg):

@@ -14,7 +14,7 @@ class JumpObstacle:
         self.savedx = self.x
         self.savedy = self.y
     def get_bb(self):
-        return self.x - 5, self.y - 30, self.x + 5, self.y - 10
+        return self.x - 5, self.y - 50, self.x + 5, self.y - 30
     def update(self):
         self.x -= 1
         if self.x < 0:
@@ -27,15 +27,16 @@ class SlideObstacle:
     def __init__(self):
         self.image = load_image('slideObstacle1.png')
         self.frame = 0
-        self.x = 1500
-        self.y = 320
+        self.x = 500
+        self.y = 500
         self.savedx = self.x
         self.savedy = self.y
     def get_bb(self):
-        return self.x, self.y, self.x + 100, self.y + 480
+        return self.x - 40, self.y - 300, self.x + 40, self.y + 300
     def update(self):
         self.x -= 1
         if self.x < 0:
-            self.x = self.savedx
+            self.x = 2000
     def draw(self):
-        self.image.draw(self.x,self.y,80,480)
+        self.image.draw(self.x,self.y,80,600)
+        draw_rectangle(*self.get_bb())
