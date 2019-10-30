@@ -16,6 +16,7 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4
 JUMPCOUNT = 0
 DOUBLEJUMPCOUNT = 0
+DEATHCOUNT = 0
 JUMPING = 0
 
 # Character Event
@@ -328,14 +329,48 @@ class SlidingState:
                     character.image.clip_draw(int(character.frame) * 270 + 10 , 0, 260, 270, cx, cy)
                 else:
                     character.image.clip_draw(int(character.frame) * 300, 1040, 300, 300, cx, cy)
+class Dead:
+    @staticmethod
+    def enter(character, event):
+        pass
 
+    @staticmethod
+    def exit(character, event):
+        if event == SPACE:
+            character.fire_ball()
+
+    @staticmethod
+    def do(character):
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 2
+        global DEATHCOUNT
+        
+        DEATHCOUNT += 1
+        FRAMES_PER_ACTION = 5
+        #character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        if DEATHCOUNT < 30:
+            character.frame = 0
+        elif 30 <= DEATHCOUNT and DEATHCOUNT < 60:
+            character.frame = 1
+        elif 60 <= DEATHCOUNT and DEATHCOUNT < 90:
+            character.frame = 2
+        elif 90 <= DEATHCOUNT and DEATHCOUNT < 120:
+            character.frame = 3
+        elif 120 <= DEATHCOUNT:
+            character.frame = 4
+
+
+
+    @staticmethod
+    def draw(character):
+        character.image.clip_draw(int(character.frame) * 270 + 1370 , 270, 240, 240, character.cx, character.cy,character.sizeX,character.sizeY)
 
 
 
 next_state_table = {
     WalkingState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
-                SPACE: RunningState, LSHIFT: WalkingState},
+                SPACE: RunningState, LSHIFT: WalkingState,COOKIE1:Dead},
     RunningState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
                 SPACE: WalkingState},
@@ -348,6 +383,9 @@ next_state_table = {
     DoubleJumpingState: {
                 UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: DoubleJumpingState,
                 DOWNKEY_DOWN: DoubleJumpingState, SPACE: DoubleJumpingState, STOP_JUMP: WalkingState},
+    Dead: {
+                UPKEY_UP: Dead, UPKEY_DOWN: Dead, DOWNKEY_UP: Dead,
+                DOWNKEY_DOWN: Dead, SPACE: Dead, STOP_JUMP: Dead}
     
 }
 
@@ -362,16 +400,21 @@ class Character:
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.x_velocity, self.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER), 0
+        self.HP = 100
         self.runspeed = 2
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
+        self.invincible = 0
         self.event_que = []
         self.cur_state = WalkingState
         self.sizeX, self.sizeY = 240, 240
         self.cur_state.enter(self, None)
 
     def get_bb(self):
-        return self.cx - 150, self.cy - 150, self.cx + 150, self.cy + 150
+        if self.cur_state == SlidingState:
+            return self.cx - 80,self.cy - 120,self.cx + 80,self.cy - 70
+        else:
+            return self.cx - 50, self.cy - 120 + JUMPING, self.cx + 70, self.cy + 30 + JUMPING
 
 
     def set_background(self, bg):
@@ -384,6 +427,11 @@ class Character:
 
     def update(self):
         self.cur_state.do(self)
+        if self.invincible > 0:
+            self.invincible -= 1
+        if self.HP <= 0:
+            self.cur_state = Dead
+            self.cur_state.enter(self, None)
         if len(self.event_que) > 0:
             event = self.event_que.pop()
             self.cur_state = next_state_table[self.cur_state][event]
@@ -392,6 +440,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
         #self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 
     def handle_event(self, event):
@@ -404,5 +453,7 @@ class Character:
                 else:
                     self.sizeX,self.sizeY = 240, 240
                     self.cy = 240
+            if key_event == COOKIE2:
+                self.HP -= 100
             self.add_event(key_event)
 

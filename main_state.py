@@ -77,16 +77,19 @@ def resume():
     pass
 
 def update():
-    for game_object in game_world.all_objects():
-        game_object.update()
+    if character.HP > 0:
+        for game_object in game_world.all_objects():
+            game_object.update()
+    else:
+        character.update()
     for jelly in jellies:
         if collide(character,jelly):
-            print(character.cx)
-            print(jelly.x)
-            print(character.cy)
-            print(jelly.y)
             jellies.remove(jelly)
             game_world.remove_object(jelly)
+    if collide(character, obstacles) and character.invincible == 0:
+        print(character.HP)
+        character.HP -= 50
+        character.invincible += 500
     
 def draw():
     for game_object in game_world.all_objects():

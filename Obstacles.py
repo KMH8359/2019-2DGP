@@ -14,13 +14,14 @@ class JumpObstacle:
         self.savedx = self.x
         self.savedy = self.y
     def get_bb(self):
-        return self.x, self.y, self.x + 80, self.y + 100
+        return self.x - 5, self.y - 30, self.x + 5, self.y - 10
     def update(self):
         self.x -= 1
         if self.x < 0:
             self.x = 2000
     def draw(self):
         self.image.draw(self.x,self.y,80,100)
+        draw_rectangle(*self.get_bb())
 class SlideObstacle:
     image = None
     def __init__(self):
