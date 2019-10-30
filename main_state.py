@@ -87,12 +87,13 @@ def update():
         character.update()
     for jelly in jellies:
         if collide(character,jelly):
-            jellies.remove(jelly)
-            game_world.remove_object(jelly)
+            jelly.x = random.randint(500,2000)
+            #jellies.remove(jelly)
+            #game_world.remove_object(jelly)
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
         if character.invincible == 0:
-            print(character.HP)
             character.HP -= 50
+            print(character.HP)
             character.invincible += 500
     
 def draw():

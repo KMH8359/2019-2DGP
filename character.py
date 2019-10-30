@@ -61,7 +61,7 @@ class WalkingState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
-        character.runspeed = 2
+        character.runspeed = 4
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.x += character.runspeed  * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
@@ -106,7 +106,8 @@ class RunningState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
-        character.runspeed = 4
+        character.runspeed = 8
+        character.invincible = 10000000
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.x += character.runspeed * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
@@ -156,10 +157,9 @@ class JumpingState:
         elif JUMPCOUNT >= 100 and JUMPCOUNT < 200:
             JUMPING -= 3
         if JUMPCOUNT % 200 == 0:
-            character.add_event(STOP_JUMP)
-            print("OK")
             JUMPING = 0
             JUMPCOUNT = 0
+            character.add_event(STOP_JUMP)
             
         JUMPCOUNT += 1
         FRAMES_PER_ACTION = 2
@@ -180,7 +180,7 @@ class JumpingState:
         cx, cy = character.canvas_width//8, 240
 
         if character.x_velocity > 0:
-            character.image.clip_draw(int(character.frame) * 270 + 15 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
+            character.image.clip_draw(int(character.frame) * 270 + 20 , 1365, 240, 240, character.cx, character.cy + JUMPING,character.sizeX,character.sizeY)
             character.dir = 1
         elif character.x_velocity < 0:
             character.image.clip_draw(int(character.frame) * 272, 0, 300, 270, cx, cy)
@@ -228,16 +228,13 @@ class DoubleJumpingState:
         global DOUBLEJUMPCOUNT
             
         if DOUBLEJUMPCOUNT >= 0 and DOUBLEJUMPCOUNT < 100:
-            #character.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER)
             JUMPING += 3
         elif DOUBLEJUMPCOUNT >= 100:
-            #character.y_velocity = -1 * (RUN_SPEED_MPS * PIXEL_PER_METER)
             JUMPING -= 3
         if JUMPING == 0:
-            character.add_event(STOP_JUMP)
-            #character.y_velocity = 0
             JUMPCOUNT = 0
             DOUBLEJUMPCOUNT = 0
+            character.add_event(STOP_JUMP)
             
         DOUBLEJUMPCOUNT += 1
         FRAMES_PER_ACTION = 6
@@ -370,13 +367,13 @@ class Dead:
 
 next_state_table = {
     WalkingState: {
-                UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
+                UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: SlidingState, DOWNKEY_DOWN: SlidingState,
                 SPACE: RunningState, LSHIFT: WalkingState,COOKIE1:Dead},
     RunningState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
                 SPACE: WalkingState},
     JumpingState: {
-                UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: JumpingState,
+                UPKEY_UP: JumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: JumpingState,
                 SPACE: JumpingState, STOP_JUMP: WalkingState},
     SlidingState: {
                 UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
@@ -402,10 +399,11 @@ class Character:
         self.dir = 1
         self.x_velocity, self.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER), 0
         self.HP = 100
-        self.runspeed = 2
+        self.runspeed = 4
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
-        self.invincible = 0
+        self.invincible = 0 # 무적시간
+        self.bigger = False # 커져라 아이템 사용중 여부
         self.event_que = []
         self.cur_state = WalkingState
         self.sizeX, self.sizeY = 240, 240
@@ -414,6 +412,8 @@ class Character:
     def get_bb(self):
         if self.cur_state == SlidingState:
             return self.cx - 80,self.cy - 120,self.cx + 80,self.cy - 70
+        elif self.bigger == True:
+            return self.cx - 200, self.cy - 400,self.cx + 200,self.cy + 100
         else:
             return self.cx - 50, self.cy - 100 + JUMPING, self.cx + 70, self.cy + 20 + JUMPING
 
@@ -451,9 +451,13 @@ class Character:
                 if self.cy < 300:
                     self.sizeX,self.sizeY = 800, 800
                     self.cy = 520
+                    self.invincible = 10000
+                    self.bigger = True
                 else:
                     self.sizeX,self.sizeY = 240, 240
                     self.cy = 240
+                    self.invincible = 0
+                    self.bigger = False
             if key_event == COOKIE2:
                 self.HP -= 100
             self.add_event(key_event)

@@ -9,7 +9,7 @@ class YellowBear:
     def __init__(self):
         self.image = load_image('YellowJellies.png')
         self.frame = 0
-        self.x = random.randint(1300,2000)
+        self.x = random.randint(500,2000)
         self.y = random.randint(300,400)
         self.savedx = self.x
         self.savedy = self.y

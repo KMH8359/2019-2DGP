@@ -9,7 +9,7 @@ class JumpObstacle:
     def __init__(self):
         self.image = load_image('jumpObstacle1.png')
         self.frame = 0
-        self.x = 800
+        self.x = 400
         self.y = 170
         self.savedx = self.x
         self.savedy = self.y
@@ -27,7 +27,7 @@ class SlideObstacle:
     def __init__(self):
         self.image = load_image('slideObstacle1.png')
         self.frame = 0
-        self.x = 500
+        self.x = 1200
         self.y = 500
         self.savedx = self.x
         self.savedy = self.y
