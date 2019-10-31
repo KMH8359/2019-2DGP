@@ -114,8 +114,8 @@ class MapTile:
         self.window_left = clamp(0,
             int(self.center_object.x) - self.canvas_width//4,
             self.w - self.canvas_width)
-        self.x -= 1
-        self.X -= 1
+        self.x -= 3
+        self.X -= 3
         if self.x < -600:
             self.x = 1800
         if self.X < -600:

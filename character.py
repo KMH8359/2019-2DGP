@@ -61,7 +61,7 @@ class WalkingState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
-        character.runspeed = 4
+        character.runspeed = 2
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.x += character.runspeed  * character.x_velocity * game_framework.frame_time
         character.y += character.y_velocity * game_framework.frame_time
@@ -106,7 +106,7 @@ class RunningState:
     def do(character):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 4
-        character.runspeed = 8
+        character.runspeed = 4
         character.invincible = 10000000
         character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.x += character.runspeed * character.x_velocity * game_framework.frame_time
@@ -152,11 +152,11 @@ class JumpingState:
         global FRAMES_PER_ACTION
         global JUMPCOUNT
         global JUMPING
-        if JUMPCOUNT >= 0 and JUMPCOUNT < 100:
-            JUMPING += 3
-        elif JUMPCOUNT >= 100 and JUMPCOUNT < 200:
-            JUMPING -= 3
-        if JUMPCOUNT % 200 == 0:
+        if JUMPCOUNT >= 0 and JUMPCOUNT < 50:
+            JUMPING += 6
+        elif JUMPCOUNT >= 50 and JUMPCOUNT < 100:
+            JUMPING -= 6
+        if JUMPCOUNT % 100 == 0:
             JUMPING = 0
             JUMPCOUNT = 0
             character.add_event(STOP_JUMP)
@@ -227,10 +227,10 @@ class DoubleJumpingState:
         global JUMPCOUNT
         global DOUBLEJUMPCOUNT
             
-        if DOUBLEJUMPCOUNT >= 0 and DOUBLEJUMPCOUNT < 100:
-            JUMPING += 3
-        elif DOUBLEJUMPCOUNT >= 100:
-            JUMPING -= 3
+        if DOUBLEJUMPCOUNT >= 0 and DOUBLEJUMPCOUNT < 50:
+            JUMPING += 6
+        elif DOUBLEJUMPCOUNT >= 50:
+            JUMPING -= 6
         if JUMPING == 0:
             JUMPCOUNT = 0
             DOUBLEJUMPCOUNT = 0
@@ -396,10 +396,11 @@ class Character:
         # Character is only once created, so instance image loading is fine
         self.image = load_image('BraveCookie.png')
         self.font = load_font('ENCR10B.TTF', 16)
+        self.score = 0
         self.dir = 1
         self.x_velocity, self.y_velocity = (RUN_SPEED_MPS * PIXEL_PER_METER), 0
         self.HP = 100
-        self.runspeed = 4
+        self.runspeed = 2
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
         self.invincible = 0 # 무적시간
@@ -441,6 +442,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
+        self.font.draw(1000,700, 'Score: %5d' % self.score, (255,255, 0))
         draw_rectangle(*self.get_bb())
         #self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 

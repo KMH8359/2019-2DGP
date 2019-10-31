@@ -16,7 +16,7 @@ class JumpObstacle:
     def get_bb(self):
         return self.x - 5, self.y - 50, self.x + 5, self.y - 30
     def update(self):
-        self.x -= 1
+        self.x -= 3
         if self.x < 0:
             self.x = 2000
     def draw(self):
@@ -34,7 +34,7 @@ class SlideObstacle:
     def get_bb(self):
         return self.x - 40, self.y - 300, self.x + 40, self.y + 300
     def update(self):
-        self.x -= 1
+        self.x -= 3
         if self.x < 0:
             self.x = 2000
     def draw(self):

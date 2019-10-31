@@ -16,7 +16,7 @@ class YellowBear:
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
     def update(self):
-        self.x -= 1
+        self.x -= 3
         if self.x < 0:
             self.x = 2000     
     def draw(self):
@@ -34,7 +34,7 @@ class PinkBear:
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
     def update(self):
-        self.x -= 1
+        self.x -= 3
         if self.x < 0:
             self.x = 2000
     def draw(self):

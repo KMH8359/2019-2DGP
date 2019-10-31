@@ -87,7 +87,8 @@ def update():
         character.update()
     for jelly in jellies:
         if collide(character,jelly):
-            jelly.x = random.randint(500,2000)
+            jelly.x = random.randint(1200,2000)
+            character.score += 100
             #jellies.remove(jelly)
             #game_world.remove_object(jelly)
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
