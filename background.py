@@ -5,33 +5,6 @@ from pico2d import *
 import game_world
 import game_framework
 
-class FixedBackground:
-
-    def __init__(self):
-        self.image = load_image('Map_OVEN1.png')
-        self.canvas_width = get_canvas_width()
-        self.canvas_height = get_canvas_height()
-        self.w = self.image.w
-        self.h = self.image.h
-
-    def set_center_object(self, boy):
-        self.center_object = boy
-
-    def draw(self):
-        self.image.clip_draw_to_origin(
-            self.window_left, self.window_bottom,
-            self.canvas_width, self.canvas_height,
-            0, 0)
-
-    def update(self):
-        pass
-        self.window_left = clamp(0,
-            int(self.center_object.x) - self.canvas_width//8,
-            self.w - self.canvas_width)
-        self.window_bottom = 0
-
-    def handle_event(self, event):
-        pass
 
 
 class InfiniteBackground:
@@ -114,8 +87,8 @@ class MapTile:
         self.window_left = clamp(0,
             int(self.center_object.x) - self.canvas_width//4,
             self.w - self.canvas_width)
-        self.x -= 3
-        self.X -= 3
+        self.x -= 2
+        self.X -= 2
         if self.x < -600:
             self.x = 1800
         if self.X < -600:
@@ -126,34 +99,5 @@ class MapTile:
     def handle_event(self, event):
         pass
 
-class MapBottom:
-    image = None
-    def __init__(self):
-        self.image = load_image('mapbottom.png')
-        self.canvas_width = get_canvas_width()
-        self.canvas_height = get_canvas_height()
-        self.w = self.image.w
-        self.h = self.image.h
-        self.x = 600
-        
-    def set_center_object(self, boy):
-        self.center_object = boy
-        
-    def draw(self):
-         self.image.draw(self.x,80,1200,160)
-         
-    def get_bb(self):
-        return self.x - 25, self.y + 100, self.x + 150, self.y + 120
-    
-    def update(self):
-        pass
-        self.window_left = clamp(0,
-            int(self.center_object.x) - self.canvas_width//4,
-            self.w - self.canvas_width)
-
-        self.window_bottom = 0
-
-    def handle_event(self, event):
-        pass
 
 

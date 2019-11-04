@@ -7,7 +7,6 @@ import title_state
 import random
 
 from character import Character
-#from background import FixedBackground as Background
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
@@ -93,7 +92,7 @@ def update():
             #game_world.remove_object(jelly)
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
         if character.invincible == 0:
-            character.HP -= 50
+            #character.HP -= 50
             print(character.HP)
             character.invincible += 500
     

@@ -18,7 +18,7 @@ class YellowBear:
     def update(self):
         self.x -= 3
         if self.x < 0:
-            self.x = 2000     
+            self.x += 2000     
     def draw(self):
         self.image.clip_draw(self.frame * 57,0,57,50,self.x,self.y,50,50)
         draw_rectangle(*self.get_bb())
@@ -36,7 +36,7 @@ class PinkBear:
     def update(self):
         self.x -= 3
         if self.x < 0:
-            self.x = 2000
+            self.x += 2000
     def draw(self):
         self.image.clip_draw(self.frame * 57,0,57,50,self.x,self.y,50,50)
         draw_rectangle(*self.get_bb())
