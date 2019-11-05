@@ -34,7 +34,17 @@ def enter():
     #items = [Coin() for i in range(10)] + [Bigger() for i in range(10)] + [Drain() for i in range(10)] + [Faster() for i in range(10)] + [smallHP() for i in range(10)]
     #game_world.add_objects(items, 1)
     global jellies
-    jellies = [YellowBear() for i in range(10)] + [PinkBear() for i in range(10)]
+    jellies = [YellowBear() for i in range(15)] + [PinkBear() for i in range(15)]
+    for i in range(30):
+        jellies[i].x = 50 * i + 300
+        jellies[i].y = 200
+    jellies[1].y = 250
+    jellies[2].y = 300
+    jellies[3].y = 250
+    jellies[17].y = 150
+    jellies[18].y = 150
+    jellies[19].y = 150
+    jellies[20].y = 150
     game_world.add_objects(jellies, 3)
     global maptile
     maptile = MapTile()
@@ -86,7 +96,7 @@ def update():
         character.update()
     for jelly in jellies:
         if collide(character,jelly):
-            jelly.x = random.randint(1200,2000)
+            jelly.x += 2000
             character.score += 100
             #jellies.remove(jelly)
             #game_world.remove_object(jelly)
@@ -95,7 +105,7 @@ def update():
             #character.HP -= 50
             print(character.HP)
             character.invincible += 500
-    
+
 def draw():
     for game_object in game_world.all_objects():
         game_object.draw()

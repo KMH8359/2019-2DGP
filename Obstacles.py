@@ -16,7 +16,7 @@ class JumpObstacle:
     def update(self):
         self.x -= 2
         if self.x < 0:
-            self.x = 2000
+            self.x += 2000
     def draw(self):
         self.image.draw(self.x,self.y,80,100)
         draw_rectangle(*self.get_bb())
@@ -32,7 +32,7 @@ class SlideObstacle:
     def update(self):
         self.x -= 2
         if self.x < 0:
-            self.x = 2000
+            self.x += 2000
     def draw(self):
         self.image.draw(self.x,self.y,80,600)
         draw_rectangle(*self.get_bb())
