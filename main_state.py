@@ -10,7 +10,7 @@ from character import Character
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
-from Jellies import PinkBear,YellowBear
+from Jellies import PinkBear, YellowBear
 from Obstacles import JumpObstacle, SlideObstacle
 
 name = "MainState"
@@ -23,6 +23,7 @@ jellies = []
 jumpobstacles = []
 slideobstacles = []
 
+
 def enter():
     global character
     character = Character()
@@ -31,8 +32,8 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
     global items
-    #items = [Coin() for i in range(10)] + [Bigger() for i in range(10)] + [Drain() for i in range(10)] + [Faster() for i in range(10)] + [smallHP() for i in range(10)]
-    #game_world.add_objects(items, 1)
+    items = [Bigger() for i in range(3)] + [Faster() for i in range(3)]
+    game_world.add_objects(items, 1)
     global jellies
     jellies = [YellowBear() for i in range(15)] + [PinkBear() for i in range(15)]
     for i in range(30):
@@ -44,23 +45,25 @@ def enter():
     jellies[17].y = 150
     jellies[18].y = 150
     jellies[19].y = 150
-    jellies[20].y = 150
     game_world.add_objects(jellies, 3)
     global maptile
     maptile = MapTile()
     game_world.add_object(maptile, 2)
     global jumpobstacles
-    jumpobstacles = JumpObstacle() 
+    jumpobstacles = JumpObstacle()
     game_world.add_object(jumpobstacles, 4)
     global slideobstacles
-    slideobstacles = SlideObstacle() 
+    slideobstacles = SlideObstacle()
     game_world.add_object(slideobstacles, 4)
 
     background.set_center_object(character)
     maptile.set_center_object(character)
     character.set_background(background)
+
+
 def exit():
     game_world.clear()
+
 
 def handle_events():
     events = get_events()
@@ -71,7 +74,8 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_event(event)
-    
+
+
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -82,11 +86,15 @@ def collide(a, b):
     if bottom_a > top_b: return False
 
     return True
+
+
 def pause():
     pass
 
+
 def resume():
     pass
+
 
 def update():
     if character.HP > 0:
@@ -95,21 +103,21 @@ def update():
     else:
         character.update()
     for jelly in jellies:
-        if collide(character,jelly):
+        if collide(character, jelly):
             jelly.x += 2000
             character.score += 100
-            #jellies.remove(jelly)
-            #game_world.remove_object(jelly)
+            # jellies.remove(jelly)
+            # game_world.remove_object(jelly)
+    for ITEM in items:
+        if collide(character, ITEM):
+            ITEM.x += 2000
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
         if character.invincible == 0:
-            #character.HP -= 50
+            # character.HP -= 50
             print(character.HP)
             character.invincible += 500
+
 
 def draw():
     for game_object in game_world.all_objects():
         game_object.draw()
-        
-
-
-
