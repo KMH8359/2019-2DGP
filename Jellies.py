@@ -4,7 +4,6 @@ from pico2d import *
 import game_world
 import random
 
-
 class YellowBear:
     image = None
 
@@ -12,12 +11,13 @@ class YellowBear:
         if self.image is None:
             self.image = load_image('YellowJellies.png')
         self.frame = 0
+        self.scrollSpeed = 2
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= 2
+        self.x -= self.scrollSpeed
         if self.x < 0:
             self.x += 2000
 
@@ -33,12 +33,13 @@ class PinkBear:
         if self.image is None:
             self.image = load_image('PinkJellies.png')
         self.frame = 0
+        self.scrollSpeed = 2
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= 2
+        self.x -= self.scrollSpeed
         if self.x < 0:
             self.x += 2000
 

@@ -6,7 +6,7 @@ import os
 import title_state
 import random
 
-from character import Character
+from character import Character, RunningState, SPACE, LSHIFT
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
@@ -22,7 +22,6 @@ items = []
 jellies = []
 jumpobstacles = []
 slideobstacles = []
-
 
 def enter():
     global character
@@ -110,6 +109,15 @@ def update():
             # game_world.remove_object(jelly)
     for ITEM in items:
         if collide(character, ITEM):
+            if ITEM.type == 'Faster':
+                ITEM.scrollSpeed = 4
+                maptile.scrollSpeed = 4
+                for jelly in jellies:
+                    jelly.scrollSpeed = 4
+                jumpobstacles.scrollSpeed = 4
+                slideobstacles.scrollSpeed = 4
+                character.cur_state = RunningState
+                character.cur_state.enter(character, None)
             ITEM.x += 2000
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
         if character.invincible == 0:
