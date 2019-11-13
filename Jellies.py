@@ -3,6 +3,7 @@ from pico2d import *
 
 import game_world
 import random
+import main_state
 
 class YellowBear:
     image = None
@@ -11,13 +12,13 @@ class YellowBear:
         if self.image is None:
             self.image = load_image('YellowJellies.png')
         self.frame = 0
-        self.scrollSpeed = 2
+        self.scrollSpeed = 300
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= self.scrollSpeed
+        self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
             self.x += 2000
 
@@ -33,13 +34,13 @@ class PinkBear:
         if self.image is None:
             self.image = load_image('PinkJellies.png')
         self.frame = 0
-        self.scrollSpeed = 2
+        self.scrollSpeed = 300
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= self.scrollSpeed
+        self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
             self.x += 2000
 

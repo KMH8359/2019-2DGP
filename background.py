@@ -4,6 +4,7 @@ from pico2d import *
 
 import game_world
 import game_framework
+import main_state
 
 class InfiniteBackground:
 
@@ -61,7 +62,7 @@ class MapTile:
         self.canvas_height = get_canvas_height()
         self.w = self.image.w
         self.h = self.image.h
-        self.scrollSpeed = 2
+        self.scrollSpeed = 300
         self.tiles = [n for n in range(11)]
         self.x = 600
         self.X = 1800
@@ -84,8 +85,8 @@ class MapTile:
         self.window_left = clamp(0,
                                  int(self.center_object.x) - self.canvas_width // 4,
                                  self.w - self.canvas_width)
-        self.x -= self.scrollSpeed
-        self.X -= self.scrollSpeed
+        self.x -= main_state.scrollspeed * game_framework.frame_time
+        self.X -= main_state.scrollspeed * game_framework.frame_time
         if self.x < -600:
             self.x = 1800
         if self.X < -600:

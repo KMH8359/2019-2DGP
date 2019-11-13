@@ -3,7 +3,7 @@ from pico2d import *
 
 import game_world
 import random
-
+import main_state
 
 class Coin:
     image = None
@@ -35,13 +35,13 @@ class Bigger:
         self.x = 1900
         self.y = 350
         self.type = "Bigger"
-        self.scrollSpeed = 2
+        self.scrollSpeed = 300
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= self.scrollSpeed
+        self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
             self.x += 2000
 
@@ -79,14 +79,14 @@ class Faster:
         self.frame = 0
         self.x = 2000
         self.y = 350
-        self.scrollSpeed = 2
+        self.scrollSpeed = 300
         self.type = 'Faster'
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
 
     def update(self):
-        self.x -= self.scrollSpeed
+        self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
             self.x += 2000
 
