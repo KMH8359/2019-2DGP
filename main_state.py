@@ -11,7 +11,7 @@ from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
 from Jellies import PinkBear, YellowBear
-from Obstacles import JumpObstacle, SlideObstacle
+from Obstacles import JumpObstacle1, JumpObstacle2, SlideObstacle1, SlideObstacle2
 
 name = "MainState"
 
@@ -20,8 +20,9 @@ character = None
 maptile = None
 items = []
 jellies = []
-jumpobstacles = []
-slideobstacles = []
+#jumpobstacles = []
+#slideobstacles = []
+obstacles = []
 scrollspeed = 500
 runTimer = 0
 bigTimer = 0
@@ -52,12 +53,15 @@ def enter():
     global maptile
     maptile = MapTile()
     game_world.add_object(maptile, 2)
-    global jumpobstacles
-    jumpobstacles = JumpObstacle()
-    game_world.add_object(jumpobstacles, 4)
-    global slideobstacles
-    slideobstacles = SlideObstacle()
-    game_world.add_object(slideobstacles, 4)
+    global obstacles
+    obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
+    game_world.add_objects(obstacles, 4)
+    #global jumpobstacles
+    #jumpobstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)]
+    #game_world.add_objects(jumpobstacles, 4)
+    #global slideobstacles
+    #slideobstacles = [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
+    #game_world.add_objects(slideobstacles, 4)
 
     background.set_center_object(character)
     maptile.set_center_object(character)
@@ -131,17 +135,16 @@ def update():
                 runTimer = 5
                 scrollspeed = 1000
                 character.running = True
-                # character.cur_state = RunningState
-                # character.cur_state.enter(character, None)
             elif ITEM.type == 'Bigger':
                 bigTimer = 5
                 character.bigger = True
             ITEM.x += 2000
-    if collide(character, jumpobstacles) or collide(character, slideobstacles):
-        if character.invincible == 0:
-            # character.HP -= 50
-            print(character.HP)
-            character.invincible += 500
+    for obstacle in obstacles:
+        if collide(character, obstacle):
+            if character.invincible == 0:
+                # character.HP -= 50
+                print(character.HP)
+                character.invincible += 500
 
 
 def draw():

@@ -234,7 +234,10 @@ class Character:
 
     def get_bb(self):
         if self.cur_state == SlidingState:
-            return self.cx - 80, self.cy - 120, self.cx + 80, self.cy - 70
+            if self.bigger:
+                return self.cx - 300, self.cy - 400, self.cx + 300, self.cy - 100
+            else:
+                return self.cx - 80, self.cy - 120, self.cx + 80, self.cy - 70
         elif self.bigger:
             return self.cx - 200, self.cy - 400, self.cx + 200, self.cy + 100
         else:

@@ -5,7 +5,8 @@ import game_world
 import random
 import main_state
 
-class JumpObstacle:
+
+class JumpObstacle1:
     image = None
 
     def __init__(self):
@@ -26,10 +27,10 @@ class JumpObstacle:
 
     def draw(self):
         self.image.draw(self.x, self.y, 80, 100)
-        # draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb())
 
 
-class SlideObstacle:
+class SlideObstacle1:
     image = None
 
     def __init__(self):
@@ -51,3 +52,51 @@ class SlideObstacle:
     def draw(self):
         self.image.draw(self.x, self.y, 80, 600)
         # draw_rectangle(*self.get_bb())
+
+
+class JumpObstacle2:
+    image = None
+
+    def __init__(self):
+        if self.image is None:
+            self.image = load_image('jumpObstacle2.png')
+        self.frame = 0
+        self.x = 1500
+        self.y = 220
+        self.scrollSpeed = 300
+
+    def get_bb(self):
+        return self.x - 20, self.y - 100, self.x + 20, self.y - 60
+
+    def update(self):
+        self.x -= main_state.scrollspeed * game_framework.frame_time
+        if self.x < 0:
+            self.x += 2000
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 120, 200)
+        draw_rectangle(*self.get_bb())
+
+
+class SlideObstacle2:
+    image = None
+
+    def __init__(self):
+        if self.image is None:
+            self.image = load_image('slideObstacle2.png')
+        self.frame = 0
+        self.x = 1600
+        self.y = 500
+        self.scrollSpeed = 300
+
+    def get_bb(self):
+        return self.x - 60, self.y - 300, self.x + 60, self.y + 300
+
+    def update(self):
+        self.x -= main_state.scrollspeed * game_framework.frame_time
+        if self.x < 0:
+            self.x += 2000
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 120, 600)
+        draw_rectangle(*self.get_bb())
