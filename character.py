@@ -59,8 +59,7 @@ class RunningState:
     def do(character):
         character.cx, character.cy = character.canvas_width // 8, 240
         character.invincible = 10000000
-        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME *
-                           game_framework.frame_time) % FRAMES_PER_ACTION
+        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME *game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
@@ -74,7 +73,7 @@ class JumpingState:
         # global FRAMES_PER_ACTION
         # FRAMES_PER_ACTION = 2
         global JUMPPOWER
-        JUMPPOWER = 6
+        JUMPPOWER = 100
         pass
 
     @staticmethod
@@ -83,13 +82,13 @@ class JumpingState:
         global JUMPING
         global JUMPPOWER
 
-        JUMPING += JUMPPOWER
+        JUMPING += JUMPPOWER * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
 
         if JUMPING < 0:
             JUMPING = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= 0.1
+        JUMPPOWER -= 1
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.frame = 7
 
@@ -106,7 +105,7 @@ class DoubleJumpingState:
         global JUMPPOWER
         # global FRAMES_PER_ACTION
         # FRAMES_PER_ACTION = 6
-        JUMPPOWER = 6
+        JUMPPOWER = 100
         pass
 
     @staticmethod
@@ -115,14 +114,14 @@ class DoubleJumpingState:
         global DOUBLEJUMPCOUNT
         global JUMPPOWER
 
-        JUMPING += JUMPPOWER
+        JUMPING += JUMPPOWER * FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time
 
         if JUMPING <= 0:
             JUMPING = 0
             DOUBLEJUMPCOUNT = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= 0.1
+        JUMPPOWER -= 1
         DOUBLEJUMPCOUNT += 1
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 

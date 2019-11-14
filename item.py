@@ -33,7 +33,7 @@ class Bigger:
             self.image = load_image('Bigger.png')
         self.frame = 0
         self.x = 1000
-        self.y = 350
+        self.y = 550
         self.type = "Bigger"
         self.scrollSpeed = 300
 
@@ -43,7 +43,7 @@ class Bigger:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 15000
 
     def draw(self):
         self.image.clip_draw(self.frame, 0, 90, 90, self.x, self.y, 75, 75)
@@ -78,7 +78,7 @@ class Faster:
             self.image = load_image('Faster.png')
         self.frame = 0
         self.x = 2000
-        self.y = 350
+        self.y = 500
         self.scrollSpeed = 300
         self.type = 'Faster'
 
@@ -88,7 +88,7 @@ class Faster:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 15000
 
     def draw(self):
         self.image.clip_draw(self.frame, 0, 90, 90, self.x, self.y, 75, 75)
@@ -99,16 +99,20 @@ class smallHP:
     image = None
 
     def __init__(self):
-        self.image = load_image('smallHP.png')
+        if self.image is None:
+            self.image = load_image('smallHP.png')
         self.frame = 0
         self.x = 1900
-        self.y = 300
+        self.y = 600
+        self.type = "smallHP"
 
     def get_bb(self):
         return self.x - 25, self.y - 25, self.x + 75, self.y + 75
 
     def update(self):
-        self.frame = (self.frame + 1) % 4
+        self.x -= main_state.scrollspeed * game_framework.frame_time
+        if self.x < 0:
+            self.x += 15000
 
     def draw(self):
         self.image.clip_draw(self.frame, 0, 90, 90, self.x, self.y, 50, 50)

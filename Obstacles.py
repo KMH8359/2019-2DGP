@@ -13,7 +13,7 @@ class JumpObstacle1:
         if self.image is None:
             self.image = load_image('jumpObstacle1.png')
         self.frame = 0
-        self.x = 400
+        self.x = 700
         self.y = 170
         self.scrollSpeed = 300
 
@@ -23,7 +23,7 @@ class JumpObstacle1:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.draw(self.x, self.y, 80, 100)
@@ -37,7 +37,7 @@ class SlideObstacle1:
         if self.image is None:
             self.image = load_image('slideObstacle1.png')
         self.frame = 0
-        self.x = 1200
+        self.x = 1800
         self.y = 500
         self.scrollSpeed = 300
 
@@ -47,7 +47,7 @@ class SlideObstacle1:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.draw(self.x, self.y, 80, 600)
@@ -61,7 +61,7 @@ class JumpObstacle2:
         if self.image is None:
             self.image = load_image('jumpObstacle2.png')
         self.frame = 0
-        self.x = 1500
+        self.x = 2900
         self.y = 220
         self.scrollSpeed = 300
 
@@ -71,7 +71,7 @@ class JumpObstacle2:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.draw(self.x, self.y, 120, 200)
@@ -85,7 +85,7 @@ class SlideObstacle2:
         if self.image is None:
             self.image = load_image('slideObstacle2.png')
         self.frame = 0
-        self.x = 1600
+        self.x = 3900
         self.y = 500
         self.scrollSpeed = 300
 
@@ -95,8 +95,32 @@ class SlideObstacle2:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.draw(self.x, self.y, 120, 600)
+        draw_rectangle(*self.get_bb())
+
+
+class JumpObstacle3:
+    image = None
+
+    def __init__(self):
+        if self.image is None:
+            self.image = load_image('jumpObstacle3.png')
+        self.frame = 0
+        self.x = 5000
+        self.y = 230
+        self.scrollSpeed = 300
+
+    def get_bb(self):
+        return self.x - 40, self.y - 110, self.x + 40, self.y - 55
+
+    def update(self):
+        self.x -= main_state.scrollspeed * game_framework.frame_time
+        if self.x < 0:
+            self.x += 5000
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 80, 220)
         draw_rectangle(*self.get_bb())

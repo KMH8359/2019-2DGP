@@ -20,7 +20,7 @@ class YellowBear:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.clip_draw(self.frame * 57, 0, 57, 50, self.x, self.y, 50, 50)
@@ -42,7 +42,7 @@ class PinkBear:
     def update(self):
         self.x -= main_state.scrollspeed * game_framework.frame_time
         if self.x < 0:
-            self.x += 2000
+            self.x += 5000
 
     def draw(self):
         self.image.clip_draw(self.frame * 57, 0, 57, 50, self.x, self.y, 50, 50)

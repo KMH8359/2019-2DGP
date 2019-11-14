@@ -6,12 +6,12 @@ import os
 import title_state
 import random
 
-from character import Character, WalkingState, RunningState
+from character import Character
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
 from Jellies import PinkBear, YellowBear
-from Obstacles import JumpObstacle1, JumpObstacle2, SlideObstacle1, SlideObstacle2
+from Obstacles import JumpObstacle1, JumpObstacle2, JumpObstacle3,   SlideObstacle1, SlideObstacle2
 
 name = "MainState"
 
@@ -20,8 +20,6 @@ character = None
 maptile = None
 items = []
 jellies = []
-#jumpobstacles = []
-#slideobstacles = []
 obstacles = []
 scrollspeed = 500
 runTimer = 0
@@ -36,25 +34,32 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
     global items
-    items = [Bigger() for i in range(3)] + [Faster() for i in range(3)]
+    items = [Bigger() for i in range(1)] + [Faster() for i in range(1)] + [smallHP() for i in range(1)]
     game_world.add_objects(items, 1)
     global jellies
-    jellies = [YellowBear() for i in range(15)] + [PinkBear() for i in range(15)]
-    for i in range(30):
-        jellies[i].x = 50 * i + 300
+    jellies = [YellowBear() for i in range(30)] + [PinkBear() for i in range(30)]
+    for i in range(60):
+        jellies[i].x = 50 * i + 600
         jellies[i].y = 200
     jellies[1].y = 250
     jellies[2].y = 300
     jellies[3].y = 250
-    jellies[17].y = 150
-    jellies[18].y = 150
-    jellies[19].y = 150
+    jellies[6].y = 250
+    jellies[7].y = 300
+    jellies[8].y = 350
+    jellies[9].y = 300
+    jellies[10].y = 250
+    jellies[22].y = 150
+    jellies[23].y = 150
+    jellies[24].y = 150
+    jellies[25].y = 150
+    jellies[26].y = 150
     game_world.add_objects(jellies, 3)
     global maptile
     maptile = MapTile()
     game_world.add_object(maptile, 2)
     global obstacles
-    obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
+    obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [JumpObstacle3() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
     game_world.add_objects(obstacles, 4)
     #global jumpobstacles
     #jumpobstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)]
@@ -125,7 +130,7 @@ def update():
         character.update()
     for jelly in jellies:
         if collide(character, jelly):
-            jelly.x += 2000
+            jelly.x += 5000
             character.score += 100
             # jellies.remove(jelly)
             # game_world.remove_object(jelly)
@@ -138,7 +143,7 @@ def update():
             elif ITEM.type == 'Bigger':
                 bigTimer = 5
                 character.bigger = True
-            ITEM.x += 2000
+            ITEM.x += 15000
     for obstacle in obstacles:
         if collide(character, obstacle):
             if character.invincible == 0:
