@@ -36,13 +36,17 @@ class WalkingState:
 
     @staticmethod
     def do(character):
-        character.frame = (
-                                      character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME
+                           * game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
-        character.image.clip_draw(int(character.frame) * 270 + 10, 1090, 240, 240, character.cx, character.cy,
-                                  character.sizeX, character.sizeY)
+        if character.running:
+            character.image.clip_draw(int(character.frame + 4) * 270 + 20, 1090, 240, 240, character.cx, character.cy,
+                                      character.sizeX, character.sizeY)
+        else:
+            character.image.clip_draw(int(character.frame) * 270 + 10, 1090, 240, 240, character.cx, character.cy,
+                                      character.sizeX, character.sizeY)
 
 
 class RunningState:
@@ -53,9 +57,10 @@ class RunningState:
 
     @staticmethod
     def do(character):
+        character.cx, character.cy = character.canvas_width // 8, 240
         character.invincible = 10000000
-        character.frame = (
-                                      character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME *
+                           game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
@@ -147,7 +152,7 @@ class SlidingState:
     @staticmethod
     def do(character):
         character.frame = (
-                                      character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+                                  character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
@@ -221,6 +226,7 @@ class Character:
         self.frame = 0
         self.invincible = 0  # 무적시간
         self.bigger = False  # 커져라 아이템 사용중 여부
+        self.running = False # 부스터 아이템 사용중 여부
         self.event_que = []
         self.cur_state = WalkingState
         self.sizeX, self.sizeY = 240, 240
@@ -246,6 +252,9 @@ class Character:
         self.cur_state.do(self)
         if self.invincible > 0:
             self.invincible -= 1
+        if self.bigger:
+            self.sizeX, self.sizeY = 800, 800
+            self.cy = 500
         if self.HP <= 0:
             self.cur_state = DeathState
             self.cur_state.enter(self, None)

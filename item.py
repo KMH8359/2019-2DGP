@@ -32,7 +32,7 @@ class Bigger:
         if self.image is None:
             self.image = load_image('Bigger.png')
         self.frame = 0
-        self.x = 1900
+        self.x = 1000
         self.y = 350
         self.type = "Bigger"
         self.scrollSpeed = 300

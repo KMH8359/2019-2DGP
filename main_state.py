@@ -6,7 +6,7 @@ import os
 import title_state
 import random
 
-from character import Character, WalkingState, RunningState, SPACE, LSHIFT
+from character import Character, WalkingState, RunningState
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile
@@ -24,6 +24,8 @@ jumpobstacles = []
 slideobstacles = []
 scrollspeed = 500
 runTimer = 0
+bigTimer = 0
+
 
 def enter():
     global character
@@ -100,13 +102,18 @@ def resume():
 def update():
     global scrollspeed
     global runTimer
+    global bigTimer
     if runTimer > 0:
         runTimer -= game_framework.frame_time
     if runTimer < 0:
-        character.cur_state = WalkingState
-        character.cur_state.enter(character, None)
+        character.running = False
         scrollspeed = 500
         runTimer = 0
+    if bigTimer > 0:
+        bigTimer -= game_framework.frame_time
+    if bigTimer < 0:
+        character.bigger = False
+        bigTimer = 0
     if character.HP > 0:
         for game_object in game_world.all_objects():
             game_object.update()
@@ -123,16 +130,19 @@ def update():
             if ITEM.type == 'Faster':
                 runTimer = 5
                 scrollspeed = 1000
-                character.cur_state = RunningState
-                character.cur_state.enter(character, None)
+                character.running = True
+                # character.cur_state = RunningState
+                # character.cur_state.enter(character, None)
             elif ITEM.type == 'Bigger':
-                pass
+                bigTimer = 5
+                character.bigger = True
             ITEM.x += 2000
     if collide(character, jumpobstacles) or collide(character, slideobstacles):
         if character.invincible == 0:
             # character.HP -= 50
             print(character.HP)
             character.invincible += 500
+
 
 def draw():
     for game_object in game_world.all_objects():
