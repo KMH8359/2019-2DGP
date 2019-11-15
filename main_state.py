@@ -9,7 +9,7 @@ import random
 from character import Character
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
-from background import MapTile
+from background import MapTile, HPbar
 from Jellies import PinkBear, YellowBear
 from Obstacles import JumpObstacle1, JumpObstacle2, JumpObstacle3,   SlideObstacle1, SlideObstacle2
 
@@ -18,6 +18,7 @@ name = "MainState"
 map = None
 character = None
 maptile = None
+hpBar = None
 items = []
 jellies = []
 obstacles = []
@@ -30,6 +31,9 @@ def enter():
     global character
     character = Character()
     game_world.add_object(character, 1)
+    global hpBar
+    hpBar = HPbar()
+    game_world.add_object(hpBar, 1)
     global background
     background = Background()
     game_world.add_object(background, 0)
@@ -147,8 +151,8 @@ def update():
     for obstacle in obstacles:
         if collide(character, obstacle):
             if character.invincible == 0:
-                # character.HP -= 50
-                print(character.HP)
+                character.HP -= 100
+                hpBar.w -= 200
                 character.invincible += 500
 
 

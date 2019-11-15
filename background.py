@@ -96,3 +96,21 @@ class MapTile:
 
     def handle_event(self, event):
         pass
+
+class HPbar:
+    image = None
+
+    def __init__(self):
+        if self.image is None:
+            self.image = load_image('hpBar.png')
+        self.canvas_width = get_canvas_width()
+        self.canvas_height = get_canvas_height()
+        self.w = 1000
+        self.h = self.image.h
+        self.x = 0
+
+    def update(self):
+        self.w -= main_state.scrollspeed * 2 * game_framework.frame_time / 100
+
+    def draw(self):
+        self.image.draw(self.x, 600, self.w, self.h)

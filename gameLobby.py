@@ -1,14 +1,14 @@
 import game_framework
 from pico2d import *
-import main_state
+import shop_state
 
-name = "ShopState"
+name = "gameLobby"
 image = None
 
 
 def enter():
     global image
-    image = load_image('shopHP.png')
+    image = load_image('gameLobby.png')
 
 
 def exit():
@@ -31,7 +31,7 @@ def handle_events():
             print(mouseY)
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if 700 <= mouseX <= 1000 and 0 <= mouseY < 150:
-                game_framework.change_state(main_state)
+                game_framework.change_state(shop_state)
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()

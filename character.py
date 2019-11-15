@@ -1,6 +1,6 @@
 import game_framework
 from pico2d import *
-
+import main_state
 import game_world
 
 # Character Action Speed
@@ -220,7 +220,7 @@ class Character:
         self.image = load_image('BraveCookie.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.score = 0
-        self.HP = 100
+        self.HP = 500
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
         self.invincible = 0  # 무적시간
@@ -252,11 +252,15 @@ class Character:
 
     def update(self):
         self.cur_state.do(self)
+        self.HP -= game_framework.frame_time * main_state.scrollspeed / 100
         if self.invincible > 0:
             self.invincible -= 1
         if self.bigger:
             self.sizeX, self.sizeY = 800, 800
-            self.cy = 500
+            self.cy = 520
+            self.invincible = 1000
+        if self.running:
+            self.invincible = 1000
         if self.HP <= 0:
             self.cur_state = DeathState
             self.cur_state.enter(self, None)
@@ -274,15 +278,7 @@ class Character:
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
-            if key_event == LSHIFT:
-                if self.cy < 300:
-                    self.sizeX, self.sizeY = 800, 800
-                    self.cy = 520
-                    self.invincible = 10000
-                    self.bigger = True
-                else:
-                    self.sizeX, self.sizeY = 240, 240
-                    self.cy = 240
-                    self.invincible = 0
-                    self.bigger = False
             self.add_event(key_event)
+
+
+
