@@ -88,7 +88,7 @@ class JumpingState:
             JUMPING = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= 1
+        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.frame = 7
 
@@ -121,8 +121,8 @@ class DoubleJumpingState:
             DOUBLEJUMPCOUNT = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= 1
-        DOUBLEJUMPCOUNT += 1
+        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
+        DOUBLEJUMPCOUNT += FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
         if 0 <= DOUBLEJUMPCOUNT < 30:
@@ -169,7 +169,7 @@ class DeathState:
     def do(character):
         global DEATHCOUNT
 
-        DEATHCOUNT += 1
+        DEATHCOUNT += game_framework.frame_time
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         if DEATHCOUNT < 30:
             character.frame = 0
