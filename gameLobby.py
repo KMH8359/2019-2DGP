@@ -5,11 +5,14 @@ import shop_state
 name = "gameLobby"
 image = None
 
+point = 0
+font = None
 
 def enter():
     global image
+    global font
     image = load_image('gameLobby.png')
-
+    font = load_font('ENCR10B.TTF', 36)
 
 def exit():
     global image
@@ -41,6 +44,7 @@ def handle_events():
 
 def draw():
     image.draw(600, 400, 1200, 800)
+    font.draw(500, 770, ' %5d ' % point, (255, 0, 0))
 
 
 def update():

@@ -2,6 +2,7 @@ import game_framework
 from pico2d import *
 import main_state
 import game_world
+import gameLobby
 
 # Character Action Speed
 TIME_PER_ACTION = 0.5
@@ -9,7 +10,6 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4
 JUMPCOUNT = 0
 DOUBLEJUMPCOUNT = 0
-DEATHCOUNT = 0
 JUMPING = 0
 JUMPPOWER = 0
 
@@ -88,7 +88,7 @@ class JumpingState:
             JUMPING = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
+        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 30
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         character.frame = 7
 
@@ -121,7 +121,7 @@ class DoubleJumpingState:
             DOUBLEJUMPCOUNT = 0
             character.add_event(STOP_JUMP)
 
-        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
+        JUMPPOWER -= FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 30
         DOUBLEJUMPCOUNT += FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 25
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
@@ -167,19 +167,18 @@ class DeathState:
 
     @staticmethod
     def do(character):
-        global DEATHCOUNT
 
-        DEATHCOUNT += game_framework.frame_time
+        character.DEATHCOUNT += FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time * 50
         # character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        if DEATHCOUNT < 30:
+        if character.DEATHCOUNT < 30:
             character.frame = 0
-        elif 30 <= DEATHCOUNT < 60:
+        elif 30 <= character.DEATHCOUNT < 60:
             character.frame = 1
-        elif 60 <= DEATHCOUNT < 90:
+        elif 60 <= character.DEATHCOUNT < 90:
             character.frame = 2
-        elif 90 <= DEATHCOUNT < 120:
+        elif 90 <= character.DEATHCOUNT < 120:
             character.frame = 3
-        elif 120 <= DEATHCOUNT:
+        elif 120 <= character.DEATHCOUNT:
             character.frame = 4
 
     @staticmethod
@@ -221,6 +220,7 @@ class Character:
         self.font = load_font('ENCR10B.TTF', 16)
         self.score = 0
         self.HP = 500
+        self.DEATHCOUNT = 0
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
         self.invincible = 0  # 무적시간
@@ -259,9 +259,13 @@ class Character:
             self.sizeX, self.sizeY = 800, 800
             self.cy = 520
             self.invincible = 1000
+        else:
+            self.sizeX, self.sizeY = 240, 240
+            self.cy = 240
         if self.running:
             self.invincible = 1000
-        if self.HP <= 0:
+        if self.HP <= 0 and self.cur_state == WalkingState:
+            gameLobby.point += self.score
             self.cur_state = DeathState
             self.cur_state.enter(self, None)
         if len(self.event_que) > 0:

@@ -1,15 +1,18 @@
 import game_framework
 from pico2d import *
 import main_state
+import gameLobby
 
 name = "ShopState"
 image = None
 
+font = None
 
 def enter():
     global image
+    global font
     image = load_image('shopHP.png')
-
+    font = load_font('ENCR10B.TTF', 36)
 
 def exit():
     global image
@@ -40,7 +43,9 @@ def handle_events():
 
 
 def draw():
+
     image.draw(600, 400, 1200, 800)
+    font.draw(480, 770, ' %5d ' % gameLobby.point, (255, 0, 0))
 
 
 def update():

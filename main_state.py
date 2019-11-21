@@ -5,6 +5,7 @@ import json
 import os
 import title_state
 import random
+import gameLobby
 
 from character import Character
 from background import InfiniteBackground as Background
@@ -25,6 +26,7 @@ obstacles = []
 scrollspeed = 500
 runTimer = 0
 bigTimer = 0
+
 
 
 def enter():
@@ -88,6 +90,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LSHIFT:
+            character.image = load_image('ButterCreamCookie.png')
         else:
             character.handle_event(event)
 
@@ -118,12 +122,14 @@ def update():
     global bigTimer
     if runTimer > 0:
         runTimer -= game_framework.frame_time
+        print(runTimer)
     if runTimer < 0:
         character.running = False
         scrollspeed = 500
         runTimer = 0
     if bigTimer > 0:
         bigTimer -= game_framework.frame_time
+        print(bigTimer)
     if bigTimer < 0:
         character.bigger = False
         bigTimer = 0
@@ -132,6 +138,8 @@ def update():
             game_object.update()
     else:
         character.update()
+        if character.DEATHCOUNT > 200:
+            game_framework.change_state(gameLobby)
     for jelly in jellies:
         if collide(character, jelly):
             jelly.x += 5000
