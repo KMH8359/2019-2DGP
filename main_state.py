@@ -90,8 +90,12 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LSHIFT:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
             character.image = load_image('ButterCreamCookie.png')
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_0:
+            character.image = load_image('BrightCookie.png')
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_2:
+            character.image = load_image('CloudCookie.png')
         else:
             character.handle_event(event)
 

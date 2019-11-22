@@ -4,12 +4,13 @@ import gameLobby
 
 name = "TitleState"
 image = None
-
+font = None
 
 def enter():
     global image
+    global font
     image = load_image('INTROIMAGE.png')
-
+    font = load_font('CookieRunFont.ttf', 60)
 
 def exit():
     global image
@@ -33,6 +34,7 @@ def handle_events():
 
 def draw():
     image.draw(600, 400, 1200, 800)
+    font.draw(300, 200, 'Press Space to Start', (0, 255, 0))
 
 
 def update():

@@ -12,7 +12,7 @@ def enter():
     global image
     global font
     image = load_image('gameLobby.png')
-    font = load_font('ENCR10B.TTF', 36)
+    font = load_font('CookieRunFont.ttf', 36)
 
 def exit():
     global image
