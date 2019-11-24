@@ -6,6 +6,8 @@ import os
 import title_state
 import random
 import gameLobby
+import gameEnd
+
 
 from character import Character
 from background import InfiniteBackground as Background
@@ -26,6 +28,7 @@ obstacles = []
 scrollspeed = 500
 runTimer = 0
 bigTimer = 0
+point = 0
 
 
 
@@ -67,12 +70,8 @@ def enter():
     global obstacles
     obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [JumpObstacle3() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
     game_world.add_objects(obstacles, 4)
-    #global jumpobstacles
-    #jumpobstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)]
-    #game_world.add_objects(jumpobstacles, 4)
-    #global slideobstacles
-    #slideobstacles = [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
-    #game_world.add_objects(slideobstacles, 4)
+    global point
+    point = 0
 
     background.set_center_object(character)
     maptile.set_center_object(character)
@@ -143,7 +142,7 @@ def update():
     else:
         character.update()
         if character.DEATHCOUNT > 200:
-            game_framework.change_state(gameLobby)
+            game_framework.change_state(gameEnd)
     for jelly in jellies:
         if collide(character, jelly):
             jelly.x += 5000

@@ -1,18 +1,18 @@
 import game_framework
 from pico2d import *
-import shop_state
+import gameLobby
+import main_state
 
-name = "gameLobby"
+name = "gameEnd"
 image = None
 
-point = 100000
 font = None
 
 def enter():
     global image
     global font
-    image = load_image('gameLobby.png')
-    font = load_font('CookieRunFont.ttf', 27)
+    image = load_image('gameEnd.png')
+    font = load_font('CookieRunFont.ttf', 100)
 
 def exit():
     global image
@@ -33,8 +33,8 @@ def handle_events():
             print(mouseX)
             print(mouseY)
         elif event.type == SDL_MOUSEBUTTONDOWN:
-            if 700 <= mouseX <= 1000 and 0 <= mouseY < 150:
-                game_framework.change_state(shop_state)
+            if 470 <= mouseX <= 720 and 40 <= mouseY < 140:
+                game_framework.change_state(gameLobby)
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
@@ -44,7 +44,7 @@ def handle_events():
 
 def draw():
     image.draw(600, 400, 1200, 800)
-    font.draw(520, 760, ' %5d ' % point, (255, 0, 0))
+    font.draw(400, 390, ' %5d ' % main_state.point, (255, 0, 0))
 
 
 def update():

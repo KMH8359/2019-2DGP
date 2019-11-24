@@ -266,6 +266,7 @@ class Character:
             self.invincible = 1000
         if self.HP <= 0 and self.cur_state == WalkingState:
             gameLobby.point += self.score
+            main_state.point += self.score
             self.cur_state = DeathState
             self.cur_state.enter(self, None)
         if len(self.event_que) > 0:

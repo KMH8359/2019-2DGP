@@ -12,7 +12,7 @@ JellyUpgradeLevel = 1
 HPUpgradeCost = 1000
 JellyUpgradeCost = 1000
 HPValue = 5
-JellyValue = 5
+JellyValue = 10
 
 def enter():
     global image
@@ -74,7 +74,7 @@ def handle_events():
                     gameLobby.point -= JellyUpgradeLevel * 1000
                     JellyUpgradeLevel += 1
                     JellyUpgradeCost = JellyUpgradeLevel * 1000
-                    JellyValue += 5
+                    JellyValue += 10
 
 
 
@@ -86,17 +86,17 @@ def handle_events():
 def draw():
     global shopType
     image.draw(600, 400, 1200, 800)
-    font.draw(520, 770, ' %5d ' % gameLobby.point, (255, 0, 0))
+    font.draw(520, 760, ' %5d ' % gameLobby.point, (255, 0, 0))
     font.draw(220, 500, ' Lv%02d' % HPUpgradeLevel, (255, 0, 255))
     font.draw(340, 500, ' Lv%02d' % JellyUpgradeLevel, (255, 0, 255))
     if shopType == 'HPshop':
-        font.draw(860, 540, ' %5d' % HPUpgradeCost, (0, 0, 255))
+        font.draw(860, 550, ' %5d' % HPUpgradeCost, (0, 0, 255))
         font.draw(800, 600, '체력 강화 Lv%02d' % HPUpgradeLevel, (0, 0, 255))
-        font.draw(820, 350, '%2d' % HPValue, (0, 0, 255))
+        font.draw(810, 350, '%2d' % HPValue, (0, 0, 255))
     else:
-        font.draw(880, 600, ' Lv%02d' % JellyUpgradeLevel, (0, 0, 255))
-        font.draw(860, 540, ' %05d' % JellyUpgradeCost * 1000, (0, 0, 255))
-        font.draw(820, 350, '%2d' % JellyValue, (0, 0, 255))
+        font.draw(860, 550, ' %5d' % JellyUpgradeCost, (0, 0, 255))
+        font.draw(800, 600, '젤리 강화 Lv%02d' % JellyUpgradeLevel, (0, 0, 255))
+        font.draw(650, 325, '젤리 획득 점수 %2d 증가' % JellyValue, (0, 0, 255))
 
 
 def update():
