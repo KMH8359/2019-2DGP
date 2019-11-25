@@ -7,7 +7,7 @@ import title_state
 import random
 import gameLobby
 import gameEnd
-
+import shop_state
 
 from character import Character
 from background import InfiniteBackground as Background
@@ -146,7 +146,7 @@ def update():
     for jelly in jellies:
         if collide(character, jelly):
             jelly.x += 5000
-            character.score += 100
+            character.score += (100 + shop_state.JellyValue)
             # jellies.remove(jelly)
             # game_world.remove_object(jelly)
     for ITEM in items:

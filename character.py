@@ -3,6 +3,7 @@ from pico2d import *
 import main_state
 import game_world
 import gameLobby
+import shop_state
 
 # Character Action Speed
 TIME_PER_ACTION = 0.5
@@ -219,7 +220,7 @@ class Character:
         self.image = load_image('BraveCookie.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.score = 0
-        self.HP = 500
+        self.HP = 500 + shop_state.HPValue
         self.DEATHCOUNT = 0
         self.cx, self.cy = self.canvas_width // 8, 240
         self.frame = 0
