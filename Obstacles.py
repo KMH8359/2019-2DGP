@@ -61,7 +61,7 @@ class JumpObstacle2:
         if self.image is None:
             self.image = load_image('jumpObstacle2.png')
         self.frame = 0
-        self.x = 2800
+        self.x = 2825
         self.y = 220
         self.scrollSpeed = 300
 

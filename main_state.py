@@ -46,23 +46,34 @@ def enter():
     items = [Bigger() for i in range(1)] + [Faster() for i in range(1)] + [smallHP() for i in range(1)]
     game_world.add_objects(items, 1)
     global jellies
-    jellies = [YellowBear() for i in range(30)] + [PinkBear() for i in range(30)]
-    for i in range(60):
+    jellies = [YellowBear() for i in range(35)] + [PinkBear() for i in range(33)]
+    for i in range(68):
         jellies[i].x = 50 * i + 600
         jellies[i].y = 200
     jellies[1].y = 250
     jellies[2].y = 300
     jellies[3].y = 250
-    jellies[6].y = 250
-    jellies[7].y = 300
-    jellies[8].y = 350
-    jellies[9].y = 300
-    jellies[10].y = 250
-    jellies[22].y = 150
-    jellies[23].y = 150
-    jellies[24].y = 150
-    jellies[25].y = 150
-    jellies[26].y = 150
+    jellies[14].y = 270
+    jellies[15].y = 340
+    jellies[16].y = 410
+    jellies[17].y = 340
+    jellies[18].y = 270
+    jellies[29].y = 150
+    jellies[30].y = 150
+    jellies[31].y = 150
+    jellies[43].y = 275
+    jellies[44].y = 350
+    jellies[45].y = 275
+    jellies[58].y = 150
+    jellies[59].y = 150
+    jellies[60].y = 150
+    jellies[61].y = 150
+    jellies[62].y = 150
+    jellies[63].y = 150
+    jellies[64].y = 150
+    jellies[65].y = 150
+    jellies[66].y = 150
+    jellies[67].y = 150
     game_world.add_objects(jellies, 3)
     global maptile
     maptile = MapTile()

@@ -58,6 +58,8 @@ def handle_events():
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if 700 <= mouseX <= 1000 and 0 <= mouseY < 150: # 게임시작
                 game_framework.change_state(main_state)
+            elif 560 <= mouseX <= 610 and 660 <= mouseY < 720:
+                game_framework.change_state(gameLobby)
             elif 330 <= mouseX <= 450 and 480 <= mouseY <= 630 and shopType == 'HPshop': # 젤리 점수 ++
                 shopType = 'Jellyshop'
                 image = load_image('shopJelly.png')
