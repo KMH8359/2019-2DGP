@@ -130,6 +130,7 @@ def draw():
         NotChoosedImage.draw(485, 90, 190, 80)
     elif not BrightCookieHave:
         CostImage.draw(485, 90, 190, 80)
+        font.draw(470, 90, '10000', (255, 0, 255))
 
     if CloudCookieSelected:
         ChoosedImage.draw(735, 90, 190, 80)
@@ -137,6 +138,7 @@ def draw():
         NotChoosedImage.draw(735, 90, 190, 80)
     elif not CloudCookieHave:
         CostImage.draw(735, 90, 190, 80)
+        font.draw(720, 90, '15000', (255, 0, 255))
 
     if ButterCreamCookieSelected:
         ChoosedImage.draw(975, 90, 190, 80)
@@ -144,9 +146,9 @@ def draw():
         NotChoosedImage.draw(975, 90, 190, 80)
     elif not ButterCreamCookieHave:
         CostImage.draw(975, 90, 190, 80)
+        font.draw(960, 90, '20000', (255, 0, 255))
 
     font.draw(520, 760, ' %5d ' % gameLobby.point, (255, 0, 0))
-    font.draw(390, 90, '10000', (255, 255, 255))
 
 
 def update():

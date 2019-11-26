@@ -69,6 +69,9 @@ def enter():
     game_world.add_object(maptile, 2)
     global obstacles
     obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [JumpObstacle3() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
+    obstacles[7].x = 3700
+    obstacles[9].x = 3900
+    obstacles[3].x = 4500
     game_world.add_objects(obstacles, 4)
     global point
     point = 0
@@ -158,7 +161,10 @@ def update():
             elif ITEM.type == 'Bigger':
                 bigTimer = 5
                 character.bigger = True
-            ITEM.x += 15000
+            elif ITEM.type == 'smallHP':
+                character.HP += 50
+                hpBar.w += 100
+            ITEM.x += 10000
     for obstacle in obstacles:
         if collide(character, obstacle):
             if character.invincible == 0:

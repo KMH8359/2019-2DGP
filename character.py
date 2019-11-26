@@ -4,6 +4,7 @@ import main_state
 import game_world
 import gameLobby
 import shop_state
+import character_shop_state
 
 # Character Action Speed
 TIME_PER_ACTION = 0.5
@@ -217,7 +218,14 @@ class Character:
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         # Character is only once created, so instance image loading is fine
-        self.image = load_image('BraveCookie.png')
+        if character_shop_state.BraveCookieSelected:
+            self.image = load_image('BraveCookie.png')
+        elif character_shop_state.BrightCookieSelected:
+            self.image = load_image('BrightCookie.png')
+        elif character_shop_state.CloudCookieSelected:
+            self.image = load_image('CloudCookie.png')
+        elif character_shop_state.ButterCreamCookieSelected:
+            self.image = load_image('ButterCreamCookie.png')
         self.font = load_font('ENCR10B.TTF', 16)
         self.score = 0
         self.HP = 500 + shop_state.HPValue
