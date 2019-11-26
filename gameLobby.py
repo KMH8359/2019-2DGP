@@ -31,8 +31,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             mouseX, mouseY = event.x, 800 - 1 - event.y
-            print(mouseX)
-            print(mouseY)
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if 700 <= mouseX <= 1000 and 0 <= mouseY < 150:
                 game_framework.change_state(shop_state)

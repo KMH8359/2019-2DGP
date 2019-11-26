@@ -263,16 +263,16 @@ class Character:
         self.cur_state.do(self)
         self.HP -= game_framework.frame_time * main_state.scrollspeed / 100
         if self.invincible > 0:
-            self.invincible -= 1
+            self.invincible -= game_framework.frame_time
         if self.bigger:
             self.sizeX, self.sizeY = 800, 800
             self.cy = 520
-            self.invincible = 1000
+            self.invincible = 2
         else:
             self.sizeX, self.sizeY = 240, 240
             self.cy = 240
         if self.running:
-            self.invincible = 1000
+            self.invincible = 2
         if self.HP <= 0 and self.cur_state == WalkingState:
             if character_shop_state.ButterCreamCookieSelected:
                 gameLobby.point += 1.25 * self.score
@@ -291,6 +291,7 @@ class Character:
         self.cur_state.draw(self)
         self.font.draw(700, 700, 'Score: %5d' % self.score, (255, 255, 0))
         draw_rectangle(*self.get_bb())
+        print(self.invincible)
         # self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 
     def handle_event(self, event):

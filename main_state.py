@@ -141,14 +141,12 @@ def update():
     global bigTimer
     if runTimer > 0:
         runTimer -= game_framework.frame_time
-        print(runTimer)
     if runTimer < 0:
         character.running = False
         scrollspeed = 500
         runTimer = 0
     if bigTimer > 0:
         bigTimer -= game_framework.frame_time
-        print(bigTimer)
     if bigTimer < 0:
         character.bigger = False
         bigTimer = 0
@@ -196,10 +194,10 @@ def update():
             ITEM.x += 10000
     for obstacle in obstacles:
         if collide(character, obstacle):
-            if character.invincible == 0:
-                character.HP -= 100
-                hpBar.w -= 200
-                character.invincible += 500
+            if character.invincible <= 0:
+                character.HP -= 300
+                hpBar.w -= 600
+                character.invincible = 2
 
 
 def draw():

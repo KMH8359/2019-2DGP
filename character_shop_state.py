@@ -58,8 +58,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             mouseX, mouseY = event.x, 800 - 1 - event.y
-            print(mouseX)
-            print(mouseY)
         elif event.type == SDL_KEYDOWN and event.type == SDLK_0:
             gameLobby.point += 10000
         elif event.type == SDL_MOUSEBUTTONDOWN:
