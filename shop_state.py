@@ -11,8 +11,8 @@ HPUpgradeLevel = 1
 JellyUpgradeLevel = 1
 HPUpgradeCost = 1000
 JellyUpgradeCost = 1000
-HPValue = 5
-JellyValue = 10
+HPValue = 50
+JellyValue = 100
 
 def enter():
     global image
@@ -71,12 +71,12 @@ def handle_events():
                     gameLobby.point -= HPUpgradeLevel * 1000
                     HPUpgradeLevel += 1
                     HPUpgradeCost = HPUpgradeLevel * 1000
-                    HPValue += 5
+                    HPValue += 50
                 elif shopType == 'Jellyshop' and gameLobby.point >= JellyUpgradeLevel * 1000:
                     gameLobby.point -= JellyUpgradeLevel * 1000
                     JellyUpgradeLevel += 1
                     JellyUpgradeCost = JellyUpgradeLevel * 1000
-                    JellyValue += 10
+                    JellyValue += 100
 
 
 

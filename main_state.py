@@ -8,6 +8,7 @@ import random
 import gameLobby
 import gameEnd
 import shop_state
+import character_shop_state
 
 from character import Character
 from background import InfiniteBackground as Background
@@ -64,6 +65,7 @@ def enter():
     jellies[43].y = 275
     jellies[44].y = 350
     jellies[45].y = 275
+    jellies[57].y = 150
     jellies[58].y = 150
     jellies[59].y = 150
     jellies[60].y = 150
@@ -103,9 +105,9 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_3:
             character.image = load_image('ButterCreamCookie.png')
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_0:
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
             character.image = load_image('BrightCookie.png')
         elif event.type == SDL_KEYDOWN and event.key == SDLK_2:
             character.image = load_image('CloudCookie.png')
@@ -156,6 +158,16 @@ def update():
     else:
         character.update()
         if character.DEATHCOUNT > 200:
+            game_world.remove_object(character)
+            for jelly in jellies:
+                game_world.remove_object(jelly)
+            for ITEM in items:
+                game_world.remove_object(ITEM)
+            for obstacle in obstacles:
+                game_world.remove_object(obstacle)
+            game_world.remove_object(maptile)
+            game_world.remove_object(hpBar)
+            game_world.remove_object(Background)
             game_framework.change_state(gameEnd)
     for jelly in jellies:
         if collide(character, jelly):
@@ -166,11 +178,17 @@ def update():
     for ITEM in items:
         if collide(character, ITEM):
             if ITEM.type == 'Faster':
-                runTimer = 5
+                if character_shop_state.CloudCookieSelected:
+                    runTimer = 6.5
+                else:
+                    runTimer = 5
                 scrollspeed = 1000
                 character.running = True
             elif ITEM.type == 'Bigger':
-                bigTimer = 5
+                if character_shop_state.CloudCookieSelected:
+                    bigTimer = 6.5
+                else:
+                    bigTimer = 5
                 character.bigger = True
             elif ITEM.type == 'smallHP':
                 character.HP += 50

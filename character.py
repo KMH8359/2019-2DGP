@@ -226,7 +226,7 @@ class Character:
             self.image = load_image('CloudCookie.png')
         elif character_shop_state.ButterCreamCookieSelected:
             self.image = load_image('ButterCreamCookie.png')
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('ENCR10B.TTF', 48)
         self.score = 0
         self.HP = 500 + shop_state.HPValue
         self.DEATHCOUNT = 0
@@ -274,8 +274,12 @@ class Character:
         if self.running:
             self.invincible = 1000
         if self.HP <= 0 and self.cur_state == WalkingState:
-            gameLobby.point += self.score
-            main_state.point += self.score
+            if character_shop_state.ButterCreamCookieSelected:
+                gameLobby.point += 1.25 * self.score
+                main_state.point += 1.25 * self.score
+            else:
+                gameLobby.point += self.score
+                main_state.point += self.score
             self.cur_state = DeathState
             self.cur_state.enter(self, None)
         if len(self.event_que) > 0:
@@ -285,7 +289,7 @@ class Character:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(1000, 700, 'Score: %5d' % self.score, (255, 255, 0))
+        self.font.draw(700, 700, 'Score: %5d' % self.score, (255, 255, 0))
         draw_rectangle(*self.get_bb())
         # self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 

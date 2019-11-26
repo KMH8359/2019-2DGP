@@ -5,6 +5,7 @@ from pico2d import *
 import game_world
 import game_framework
 import main_state
+import shop_state
 
 class InfiniteBackground:
 
@@ -105,7 +106,7 @@ class HPbar:
             self.image = load_image('hpBar.png')
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
-        self.w = 1000
+        self.w = 1000 + shop_state.HPValue * 2
         self.h = self.image.h
         self.x = 0
 
@@ -114,3 +115,4 @@ class HPbar:
 
     def draw(self):
         self.image.draw(self.x, 600, self.w, self.h)
+        print(self.w)
