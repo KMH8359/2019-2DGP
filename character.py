@@ -76,6 +76,7 @@ class JumpingState:
         # FRAMES_PER_ACTION = 2
         global JUMPPOWER
         JUMPPOWER = 100
+        character.jump()
         pass
 
     @staticmethod
@@ -108,6 +109,7 @@ class DoubleJumpingState:
         # global FRAMES_PER_ACTION
         # FRAMES_PER_ACTION = 6
         JUMPPOWER = 100
+        character.jump()
         pass
 
     @staticmethod
@@ -149,6 +151,7 @@ class SlidingState:
     def enter(character, event):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 2
+        character.slide()
 
     @staticmethod
     def do(character):
@@ -239,6 +242,15 @@ class Character:
         self.cur_state = WalkingState
         self.sizeX, self.sizeY = 240, 240
         self.cur_state.enter(self, None)
+        self.slide_sound = load_wav('slide_sound.wav')
+        self.slide_sound.set_volume(128)
+        self.jump_sound = load_wav('jump_sound.wav')
+        self.jump_sound.set_volume(128)
+
+    def slide(self):
+        self.slide_sound.play()
+    def jump(self):
+        self.jump_sound.play()
 
     def get_bb(self):
         if self.cur_state == SlidingState:

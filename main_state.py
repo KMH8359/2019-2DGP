@@ -30,6 +30,7 @@ scrollspeed = 500
 runTimer = 0
 bigTimer = 0
 point = 0
+eat_sound = None
 
 
 
@@ -88,6 +89,9 @@ def enter():
     game_world.add_objects(obstacles, 4)
     global point
     point = 0
+    global eat_sound
+    eat_sound = load_wav('eat_sound.wav')
+    eat_sound.set_volume(48)
 
     background.set_center_object(character)
     maptile.set_center_object(character)
@@ -164,13 +168,16 @@ def update():
             for obstacle in obstacles:
                 game_world.remove_object(obstacle)
             game_world.remove_object(maptile)
+            hpBar.bgm.stop()
             game_world.remove_object(hpBar)
             game_world.remove_object(Background)
             game_framework.change_state(gameEnd)
+
     for jelly in jellies:
         if collide(character, jelly):
             jelly.x += 5000
             character.score += (100 + shop_state.JellyValue)
+            eat_sound.play()
             # jellies.remove(jelly)
             # game_world.remove_object(jelly)
     for ITEM in items:
