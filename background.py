@@ -109,6 +109,9 @@ class HPbar:
         self.w = 1000 + shop_state.HPValue * 2
         self.h = self.image.h
         self.x = 0
+        self.bgm = load_music('Bgm_maingame.ogg')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
     def update(self):
         self.w -= main_state.scrollspeed * 2 * game_framework.frame_time / 100
