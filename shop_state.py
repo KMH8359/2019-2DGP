@@ -13,15 +13,19 @@ HPUpgradeCost = 1000
 JellyUpgradeCost = 1000
 HPValue = 50
 JellyValue = 100
+game_start_sound = None
 
 def enter():
     global image
     global font
     global shopType
+    global game_start_sound
 
     image = load_image('shopHP.png')
     font = load_font('CookieRunFont.ttf', 27)
     shopType = 'HPshop'
+    game_start_sound = load_wav('game_start_sound.wav')
+    game_start_sound.set_volume(64)
 
 
 
@@ -54,9 +58,13 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.type == SDLK_0:
             gameLobby.point += 10000
         elif event.type == SDL_MOUSEBUTTONDOWN:
+            gameLobby.click_sound.play()
             if 700 <= mouseX <= 1000 and 0 <= mouseY < 150: # 게임시작
+                game_start_sound.play()
+                delay(0.5)
                 game_framework.change_state(main_state)
             elif 560 <= mouseX <= 610 and 660 <= mouseY < 720:
+                delay(0.2)
                 game_framework.change_state(gameLobby)
             elif 330 <= mouseX <= 450 and 480 <= mouseY <= 630 and shopType == 'HPshop': # 젤리 점수 ++
                 shopType = 'Jellyshop'

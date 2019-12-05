@@ -18,6 +18,7 @@ CloudCookieSelected = False
 CloudCookieHave = False
 
 
+
 def enter():
     global image
     global font
@@ -61,7 +62,9 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.type == SDLK_0:
             gameLobby.point += 10000
         elif event.type == SDL_MOUSEBUTTONDOWN:
+            gameLobby.click_sound.play()
             if 1040 <= mouseX <= 1080 and 635 <= mouseY <= 685:
+                delay(0.2)
                 game_framework.change_state(gameLobby)
             elif 140 <= mouseX <= 330 and 50 <= mouseY <= 130 and BraveCookieSelected == False:  # 용감한 쿠키
                 BraveCookieSelected = True

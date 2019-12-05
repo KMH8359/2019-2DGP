@@ -169,6 +169,7 @@ class DeathState:
     def enter(character, event):
         global FRAMES_PER_ACTION
         FRAMES_PER_ACTION = 2
+        character.death_sound.play()
 
     @staticmethod
     def do(character):
@@ -246,6 +247,8 @@ class Character:
         self.slide_sound.set_volume(128)
         self.jump_sound = load_wav('jump_sound.wav')
         self.jump_sound.set_volume(128)
+        self.death_sound = load_wav('character_death_sound.wav')
+        self.death_sound.set_volume(96)
 
     def slide(self):
         self.slide_sound.play()
