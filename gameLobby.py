@@ -2,13 +2,20 @@ import game_framework
 from pico2d import *
 import shop_state
 import character_shop_state
+import json
+import os
 
 name = "gameLobby"
 image = None
 bgm = None
 click_sound = None
+data_list = None
 
-point = 100000
+with open('saveData.json') as f:
+    data_list = json.load(f)
+
+point = data_list['Point']
+# point = 100000
 font = None
 
 def enter():
