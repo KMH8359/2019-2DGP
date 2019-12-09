@@ -11,7 +11,7 @@ bgm = None
 click_sound = None
 data_list = None
 
-with open('saveData.json') as f:
+with open('D:/2019-2DGP/images/saveData.json', 'r') as f:
     data_list = json.load(f)
 
 point = data_list['Point']

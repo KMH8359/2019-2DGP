@@ -8,7 +8,7 @@ image = None
 shopType = None
 font = None
 
-with open('saveData.json', 'r') as f:
+with open('D:/2019-2DGP/images/saveData.json', 'r') as f:
     data_list = json.load(f)
 
 HPUpgradeLevel = data_list['HPLevel']
@@ -81,23 +81,23 @@ def handle_events():
                     gameLobby.point -= HPUpgradeLevel * 1000
                     data_list['Point'] -= HPUpgradeLevel * 1000
                     data_list['HPLevel'] += 1
-                    print(data_list)
                     HPUpgradeLevel += 1
                     HPUpgradeCost = HPUpgradeLevel * 1000
                     HPValue += 50
                 elif shopType == 'Jellyshop' and gameLobby.point >= JellyUpgradeLevel * 1000:
                     gameLobby.point -= JellyUpgradeLevel * 1000
+                    data_list['Point'] -= JellyUpgradeLevel * 1000
+                    data_list['JellyLevel'] += 1
                     JellyUpgradeLevel += 1
                     JellyUpgradeCost = JellyUpgradeLevel * 1000
                     JellyValue += 100
-            with open('saveData.json', 'w', encoding='utf-8') as make_file:
-                json.dump(data_list, make_file, indent="\t")
-
-
-
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
+
+        with open('D:/2019-2DGP/images/saveData.json', 'w', encoding='utf-8') as make_file:
+            json.dump(data_list, make_file, indent="\t")
+
 
 
 def draw():

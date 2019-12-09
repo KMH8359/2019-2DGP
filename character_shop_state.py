@@ -3,19 +3,23 @@ from pico2d import *
 import main_state
 import gameLobby
 
+with open('D:/2019-2DGP/images/saveData.json', 'r') as p:
+    data_list = json.load(p)
+
 name = "CharacterShopState"
 image = None
 ChoosedImage = None
 CostImage = None
 NotChoosedImage = None
 font = None
-BraveCookieSelected = True
-BrightCookieSelected = False
-BrightCookieHave = False
-ButterCreamCookieSelected = False
-ButterCreamCookieHave = False
-CloudCookieSelected = False
-CloudCookieHave = False
+BraveCookieSelected = data_list['BraveCookieSelected']
+BrightCookieSelected = data_list['BrightCookieSelected']
+BrightCookieHave = data_list['BrightCookieHave']
+ButterCreamCookieSelected = data_list['ButterCreamCookieSelected']
+ButterCreamCookieHave = data_list['ButterCreamCookieHave']
+CloudCookieSelected = data_list['CloudCookieSelected']
+CloudCookieHave = data_list['CloudCookieHave']
+
 
 
 
@@ -71,6 +75,10 @@ def handle_events():
                 BrightCookieSelected = False
                 CloudCookieSelected = False
                 ButterCreamCookieSelected = False
+                data_list['BraveCookieSelected'] = True
+                data_list['BrightCookieSelected'] = False
+                data_list['ButterCreamCookieSelected'] = False
+                data_list['CloudCookieSelected'] = False
             elif 390 <= mouseX <= 580 and 50 <= mouseY < 130:  # 명랑한 쿠키
                 if BrightCookieHave == False and gameLobby.point >= 10000:
                     gameLobby.point -= 10000
@@ -79,11 +87,21 @@ def handle_events():
                     BraveCookieSelected = False
                     CloudCookieSelected = False
                     ButterCreamCookieSelected = False
+                    data_list['Point'] -= 10000
+                    data_list['BraveCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = True
+                    data_list['BrightCookieHave'] = True
+                    data_list['ButterCreamCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = False
                 elif BrightCookieSelected == False and BrightCookieHave:
                     BraveCookieSelected = False
                     BrightCookieSelected = True
                     CloudCookieSelected = False
                     ButterCreamCookieSelected = False
+                    data_list['BraveCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = True
+                    data_list['ButterCreamCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = False
             elif 640 <= mouseX <= 830 and 50 <= mouseY < 130:  # 구름맛 쿠키
                 if CloudCookieHave == False and gameLobby.point >= 15000:
                     gameLobby.point -= 15000
@@ -92,11 +110,21 @@ def handle_events():
                     BraveCookieSelected = False
                     BrightCookieSelected = False
                     ButterCreamCookieSelected = False
+                    data_list['Point'] -= 15000
+                    data_list['BraveCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = True
+                    data_list['CloudCookieHave'] = True
+                    data_list['ButterCreamCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = False
                 elif CloudCookieSelected == False and CloudCookieHave:
                     BraveCookieSelected = False
                     BrightCookieSelected = False
                     CloudCookieSelected = True
                     ButterCreamCookieSelected = False
+                    data_list['BraveCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = False
+                    data_list['ButterCreamCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = True
             elif 880 <= mouseX <= 1070 and 50 <= mouseY <= 130:  # 버터크림맛 쿠키
                 if ButterCreamCookieHave == False and gameLobby.point >= 20000:
                     gameLobby.point -= 20000
@@ -105,17 +133,27 @@ def handle_events():
                     BraveCookieSelected = False
                     CloudCookieSelected = False
                     BrightCookieSelected = False
+                    data_list['Point'] -= 20000
+                    data_list['ButterCreamCookieSelected'] = True
+                    data_list['ButterCreamCookieHave'] = True
+
+                    data_list['BraveCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = False
                 elif ButterCreamCookieSelected == False and ButterCreamCookieHave:
                     BraveCookieSelected = False
                     BrightCookieSelected = False
                     CloudCookieSelected = False
                     ButterCreamCookieSelected = True
-
-
-
+                    data_list['BraveCookieSelected'] = False
+                    data_list['CloudCookieSelected'] = False
+                    data_list['BrightCookieSelected'] = False
+                    data_list['ButterCreamCookieSelected'] = True
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
+        with open('D:/2019-2DGP/images/saveData.json', 'w', encoding='utf-8') as make_file:
+            json.dump(data_list, make_file, indent="\t")
 
 
 def draw():
