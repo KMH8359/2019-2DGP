@@ -10,7 +10,7 @@ import gameEnd
 import shop_state
 import character_shop_state
 
-from character import Character
+from character import Character, Pet
 from background import InfiniteBackground as Background
 from item import Coin, Bigger, Drain, Faster, smallHP
 from background import MapTile, HPbar
@@ -21,6 +21,7 @@ name = "MainState"
 
 map = None
 character = None
+pet = None
 maptile = None
 hpBar = None
 items = []
@@ -38,6 +39,9 @@ def enter():
     global character
     character = Character()
     game_world.add_object(character, 1)
+    global pet
+    pet = Pet()
+    game_world.add_object(pet, 1)
     global hpBar
     hpBar = HPbar()
     game_world.add_object(hpBar, 1)

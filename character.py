@@ -61,7 +61,8 @@ class RunningState:
     def do(character):
         character.cx, character.cy = character.canvas_width // 8, 240
         character.invincible = 10000000
-        character.frame = (character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME *game_framework.frame_time) % FRAMES_PER_ACTION
+        character.frame = (
+                                      character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
@@ -238,7 +239,7 @@ class Character:
         self.frame = 0
         self.invincible = 0  # 무적시간
         self.bigger = False  # 커져라 아이템 사용중 여부
-        self.running = False # 부스터 아이템 사용중 여부
+        self.running = False  # 부스터 아이템 사용중 여부
         self.event_que = []
         self.cur_state = WalkingState
         self.sizeX, self.sizeY = 240, 240
@@ -252,6 +253,7 @@ class Character:
 
     def slide(self):
         self.slide_sound.play()
+
     def jump(self):
         self.jump_sound.play()
 
@@ -315,4 +317,39 @@ class Character:
             self.add_event(key_event)
 
 
+class Pet:
 
+    def __init__(self):
+        self.canvas_width = get_canvas_width()
+        self.canvas_height = get_canvas_height()
+        # Character is only once created, so instance image loading is fine
+        self.image = load_image('ChocoPet.png')
+        self.cx, self.cy = self.canvas_width // 16, 140
+        self.frame = 0
+        self.bigger = False  # 커져라 아이템 사용중 여부
+        self.running = False  # 부스터 아이템 사용중 여부
+        self.sizeX, self.sizeY = 240, 240
+
+    def set_background(self, bg):
+        self.bg = bg
+        self.x = 0
+        self.y = self.bg.h / 2
+
+    def add_event(self, event):
+        self.event_que.insert(0, event)
+
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME
+                      * game_framework.frame_time) % FRAMES_PER_ACTION
+        if self.bigger:
+            self.sizeX, self.sizeY = 800, 800
+            self.cy = 520
+            self.invincible = 2
+        else:
+            self.sizeX, self.sizeY = 240, 240
+            self.cy = 240
+
+    def draw(self):
+        self.image.clip_draw(int(self.frame) * 140, 560, 140, 140, self.cx, self.cy + JUMPING,
+                                  self.sizeX, self.sizeY)
+        # self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
