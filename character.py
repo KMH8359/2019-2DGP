@@ -62,7 +62,7 @@ class RunningState:
         character.cx, character.cy = character.canvas_width // 8, 240
         character.invincible = 10000000
         character.frame = (
-                                      character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+                                  character.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
     @staticmethod
     def draw(character):
@@ -324,11 +324,11 @@ class Pet:
         self.canvas_height = get_canvas_height()
         # Character is only once created, so instance image loading is fine
         self.image = load_image('ChocoPet.png')
-        self.cx, self.cy = self.canvas_width // 16, 140
+        self.lx, self.ly = self.canvas_width // 16, 240
         self.frame = 0
         self.bigger = False  # 커져라 아이템 사용중 여부
         self.running = False  # 부스터 아이템 사용중 여부
-        self.sizeX, self.sizeY = 240, 240
+        self.sizeX, self.sizeY = 120, 120
 
     def set_background(self, bg):
         self.bg = bg
@@ -342,14 +342,12 @@ class Pet:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME
                       * game_framework.frame_time) % FRAMES_PER_ACTION
         if self.bigger:
-            self.sizeX, self.sizeY = 800, 800
-            self.cy = 520
-            self.invincible = 2
-        else:
             self.sizeX, self.sizeY = 240, 240
-            self.cy = 240
+            self.ly = 520
+        else:
+            self.sizeX, self.sizeY = 120, 120
+            self.ly = 240
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 140, 560, 140, 140, self.cx, self.cy + JUMPING,
-                                  self.sizeX, self.sizeY)
-        # self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
+        self.image.clip_draw(int(self.frame) * 140 + 10, 560 + 10, 130, 130, self.lx, self.ly + JUMPING,
+                             self.sizeX, self.sizeY)

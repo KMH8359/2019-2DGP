@@ -157,6 +157,7 @@ def update():
         bigTimer -= game_framework.frame_time
     if bigTimer < 0:
         character.bigger = False
+        pet.bigger = False
         bigTimer = 0
     if character.HP > 0:
         for game_object in game_world.all_objects():
@@ -199,6 +200,7 @@ def update():
                 else:
                     bigTimer = 5
                 character.bigger = True
+                pet.bigger = True
             elif ITEM.type == 'smallHP':
                 character.HP += 50
                 hpBar.w += 100
