@@ -8,7 +8,7 @@ image = None
 shopType = None
 font = None
 
-with open('D:/2019-2DGP/images/saveData.json', 'r') as f:
+with open('saveData.json', 'r') as f:
     data_list = json.load(f)
 
 HPUpgradeLevel = data_list['HPLevel']
@@ -95,7 +95,7 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
 
-        with open('D:/2019-2DGP/images/saveData.json', 'w', encoding='utf-8') as make_file:
+        with open('saveData.json', 'w', encoding='utf-8') as make_file:
             json.dump(data_list, make_file, indent="\t")
 
 
