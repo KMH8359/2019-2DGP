@@ -32,7 +32,7 @@ class Bigger:
         if self.image is None:
             self.image = load_image('Bigger.png')
         self.frame = 0
-        self.x = 2500
+        self.x = 3000
         self.y = 550
         self.type = "Bigger"
         self.scrollSpeed = 300
@@ -77,7 +77,7 @@ class Faster:
         if self.image is None:
             self.image = load_image('Faster.png')
         self.frame = 0
-        self.x = 5000
+        self.x = 5500
         self.y = 500
         self.scrollSpeed = 300
         self.type = 'Faster'
@@ -102,7 +102,7 @@ class smallHP:
         if self.image is None:
             self.image = load_image('smallHP.png')
         self.frame = 0
-        self.x = 10000
+        self.x = 10500
         self.y = 600
         self.type = "smallHP"
 

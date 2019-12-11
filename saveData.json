@@ -1,11 +1,11 @@
 {
-	"Point": 50000,
+	"Point": 69050.0,
 	"HPLevel": 1,
 	"JellyLevel": 1,
 	"BrightCookieHave": false,
 	"CloudCookieHave": false,
 	"ButterCreamCookieHave": false,
-	"BraveCookieSelected": false,
+	"BraveCookieSelected": true,
 	"BrightCookieSelected": false,
 	"CloudCookieSelected": false,
 	"ButterCreamCookieSelected": false

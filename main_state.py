@@ -54,7 +54,7 @@ def enter():
     global jellies
     jellies = [YellowBear() for i in range(35)] + [PinkBear() for i in range(33)]
     for i in range(68):
-        jellies[i].x = 50 * i + 600
+        jellies[i].x = 50 * i + 1100
         jellies[i].y = 200
     jellies[1].y = 250
     jellies[2].y = 300
@@ -87,9 +87,9 @@ def enter():
     game_world.add_object(maptile, 2)
     global obstacles
     obstacles = [JumpObstacle1() for i in range(2)] + [JumpObstacle2() for i in range(2)] + [JumpObstacle3() for i in range(2)] + [SlideObstacle1() for i in range(2)] + [SlideObstacle2() for i in range(2)]
-    obstacles[7].x = 3700
-    obstacles[9].x = 3900
-    obstacles[3].x = 4500
+    obstacles[7].x = 4200
+    obstacles[9].x = 4400
+    obstacles[3].x = 5000
     game_world.add_objects(obstacles, 4)
     global point
     point = 0
@@ -113,12 +113,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_3:
-            character.image = load_image('ButterCreamCookie.png')
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
-            character.image = load_image('BrightCookie.png')
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_2:
-            character.image = load_image('CloudCookie.png')
         else:
             character.handle_event(event)
 
@@ -208,8 +202,8 @@ def update():
     for obstacle in obstacles:
         if collide(character, obstacle):
             if character.invincible <= 0:
-                character.HP -= 300
-                hpBar.w -= 600
+                character.HP -= 150
+                hpBar.w -= 300
                 character.invincible = 2
 
 

@@ -114,8 +114,7 @@ class HPbar:
         self.bgm.repeat_play()
 
     def update(self):
-        self.w -= main_state.scrollspeed * 2 * game_framework.frame_time / 100
+        self.w -= main_state.scrollspeed * 2 * game_framework.frame_time / 50
 
     def draw(self):
         self.image.draw(self.x, 600, self.w, self.h)
-        print(self.w)

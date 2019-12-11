@@ -5,6 +5,7 @@ import game_world
 import gameLobby
 import shop_state
 import character_shop_state
+from collections import defaultdict
 
 # Character Action Speed
 TIME_PER_ACTION = 0.5
@@ -15,16 +16,17 @@ DOUBLEJUMPCOUNT = 0
 JUMPING = 0
 JUMPPOWER = 0
 
+with open('saveData.json', 'r') as p:
+    data_list = json.load(p)
+
 # Character Event
-UPKEY_DOWN, DOWNKEY_DOWN, UPKEY_UP, DOWNKEY_UP, SPACE, STOP_JUMP, LSHIFT = range(7)
+UPKEY_DOWN, DOWNKEY_DOWN, UPKEY_UP, DOWNKEY_UP, STOP_JUMP = range(5)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_UP): UPKEY_DOWN,
     (SDL_KEYDOWN, SDLK_DOWN): DOWNKEY_DOWN,
     (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE,
-    (SDL_KEYDOWN, SDLK_LSHIFT): LSHIFT,
 }
 
 
@@ -66,15 +68,15 @@ class RunningState:
 
     @staticmethod
     def draw(character):
-        character.image.clip_draw(int(character.frame + 4) * 270 + 20, 1090, 240, 240, character.cx, character.cy,
+        character.image.clip_draw(int(character.frame + 4) * 270 + 25, 1090, 240, 240, character.cx, character.cy,
                                   character.sizeX, character.sizeY)
 
 
 class JumpingState:
     @staticmethod
     def enter(character, event):
-        # global FRAMES_PER_ACTION
-        # FRAMES_PER_ACTION = 2
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 4
         global JUMPPOWER
         JUMPPOWER = 100
         character.jump()
@@ -107,8 +109,8 @@ class DoubleJumpingState:
     @staticmethod
     def enter(character, event):
         global JUMPPOWER
-        # global FRAMES_PER_ACTION
-        # FRAMES_PER_ACTION = 6
+        global FRAMES_PER_ACTION
+        FRAMES_PER_ACTION = 4
         JUMPPOWER = 100
         character.jump()
         pass
@@ -197,22 +199,19 @@ class DeathState:
 next_state_table = {
     WalkingState: {
         UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: SlidingState, DOWNKEY_DOWN: SlidingState,
-        SPACE: RunningState, LSHIFT: WalkingState},
-    RunningState: {
-        UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: SlidingState,
-        SPACE: WalkingState},
+    STOP_JUMP: WalkingState},
     JumpingState: {
         UPKEY_UP: JumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: JumpingState, DOWNKEY_DOWN: JumpingState,
-        SPACE: JumpingState, STOP_JUMP: WalkingState},
+        STOP_JUMP: WalkingState},
     SlidingState: {
         UPKEY_UP: JumpingState, UPKEY_DOWN: JumpingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
-        SPACE: JumpingState},
+    STOP_JUMP: WalkingState},
     DoubleJumpingState: {
         UPKEY_UP: DoubleJumpingState, UPKEY_DOWN: DoubleJumpingState, DOWNKEY_UP: DoubleJumpingState,
-        DOWNKEY_DOWN: DoubleJumpingState, SPACE: DoubleJumpingState, STOP_JUMP: WalkingState},
+        DOWNKEY_DOWN: DoubleJumpingState, STOP_JUMP: WalkingState},
     DeathState: {
         UPKEY_UP: DeathState, UPKEY_DOWN: DeathState, DOWNKEY_UP: DeathState,
-        DOWNKEY_DOWN: DeathState, SPACE: DeathState, STOP_JUMP: DeathState}
+        DOWNKEY_DOWN: DeathState, STOP_JUMP: DeathState}
 
 }
 
@@ -231,7 +230,8 @@ class Character:
             self.image = load_image('CloudCookie.png')
         elif character_shop_state.ButterCreamCookieSelected:
             self.image = load_image('ButterCreamCookie.png')
-        self.font = load_font('ENCR10B.TTF', 48)
+        self.font = load_font('CookieRunFont.ttf', 48)
+        self.font2 = load_font('CookieRunFont.ttf', 24)
         self.score = 0
         self.HP = 500 + shop_state.HPValue
         self.DEATHCOUNT = 0
@@ -278,7 +278,7 @@ class Character:
 
     def update(self):
         self.cur_state.do(self)
-        self.HP -= game_framework.frame_time * main_state.scrollspeed / 100
+        self.HP -= game_framework.frame_time * main_state.scrollspeed / 50
         if self.invincible > 0:
             self.invincible -= game_framework.frame_time
         if self.bigger:
@@ -290,25 +290,32 @@ class Character:
             self.cy = 240
         if self.running:
             self.invincible = 2
-        if self.HP <= 0 and self.cur_state == WalkingState:
+        if self.HP <= 0 and (self.cur_state == WalkingState or self.cur_state == SlidingState):
             if character_shop_state.ButterCreamCookieSelected:
                 gameLobby.point += 1.25 * self.score
                 main_state.point += 1.25 * self.score
             else:
                 gameLobby.point += self.score
                 main_state.point += self.score
+            data_list['Point'] = gameLobby.point
+            with open('saveData.json', 'w', encoding='utf-8') as make_file:
+                json.dump(data_list, make_file, indent="\t")
             self.cur_state = DeathState
             self.cur_state.enter(self, None)
         if len(self.event_que) > 0:
             event = self.event_que.pop()
+            compare_state = self.cur_state
             self.cur_state = next_state_table[self.cur_state][event]
-            self.cur_state.enter(self, event)
+            if compare_state != self.cur_state:
+                self.cur_state.enter(self, event)
 
     def draw(self):
+        print(JUMPING)
         self.cur_state.draw(self)
         self.font.draw(700, 700, 'Score: %5d' % self.score, (255, 255, 0))
-        draw_rectangle(*self.get_bb())
-        print(self.invincible)
+        if self.invincible > 0 and self.HP > 0:
+            self.font2.draw(self.cx - 20, self.cy + JUMPING + 50, '%0.5f' % self.invincible,
+                           (255, 255, 0))
         # self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%5d, %5d)' % (self.x, self.y), (255, 255, 0))
 
     def handle_event(self, event):
@@ -349,5 +356,6 @@ class Pet:
             self.ly = 240
 
     def draw(self):
+
         self.image.clip_draw(int(self.frame) * 140 + 10, 560 + 10, 130, 130, self.lx, self.ly + JUMPING,
                              self.sizeX, self.sizeY)

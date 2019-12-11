@@ -13,7 +13,7 @@ class JumpObstacle1:
         if self.image is None:
             self.image = load_image('jumpObstacle1.png')
         self.frame = 0
-        self.x = 700
+        self.x = 1200
         self.y = 170
         self.scrollSpeed = 300
 
@@ -27,7 +27,6 @@ class JumpObstacle1:
 
     def draw(self):
         self.image.draw(self.x, self.y, 80, 100)
-        draw_rectangle(*self.get_bb())
 
 
 class SlideObstacle1:
@@ -37,7 +36,7 @@ class SlideObstacle1:
         if self.image is None:
             self.image = load_image('slideObstacle1.png')
         self.frame = 0
-        self.x = 2100
+        self.x = 2600
         self.y = 500
         self.scrollSpeed = 300
 
@@ -61,7 +60,7 @@ class JumpObstacle2:
         if self.image is None:
             self.image = load_image('jumpObstacle2.png')
         self.frame = 0
-        self.x = 2825
+        self.x = 3325
         self.y = 220
         self.scrollSpeed = 300
 
@@ -75,7 +74,6 @@ class JumpObstacle2:
 
     def draw(self):
         self.image.draw(self.x, self.y, 120, 200)
-        draw_rectangle(*self.get_bb())
 
 
 class SlideObstacle2:
@@ -85,7 +83,7 @@ class SlideObstacle2:
         if self.image is None:
             self.image = load_image('slideObstacle2.png')
         self.frame = 0
-        self.x = 3500
+        self.x = 4000
         self.y = 500
         self.scrollSpeed = 300
 
@@ -99,7 +97,6 @@ class SlideObstacle2:
 
     def draw(self):
         self.image.draw(self.x, self.y, 120, 600)
-        draw_rectangle(*self.get_bb())
 
 
 class JumpObstacle3:
@@ -109,7 +106,7 @@ class JumpObstacle3:
         if self.image is None:
             self.image = load_image('jumpObstacle3.png')
         self.frame = 0
-        self.x = 1400
+        self.x = 1900
         self.y = 230
         self.scrollSpeed = 300
 
@@ -123,4 +120,3 @@ class JumpObstacle3:
 
     def draw(self):
         self.image.draw(self.x, self.y, 98, 300)
-        draw_rectangle(*self.get_bb())
