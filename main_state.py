@@ -21,7 +21,7 @@ name = "MainState"
 
 map = None
 character = None
-pet = None
+pet = None   
 maptile = None
 hpBar = None
 items = []
